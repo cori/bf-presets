@@ -14,7 +14,7 @@ presets/<firmware_version>/<category>/<name>.txt
 - **Firmware version** — the Configurator only shows a preset when the connected
   FC's version `startsWith` one of its `FIRMWARE_VERSION` lines. This is the only
   hard gate; a single file can list several versions.
-- **Category** — fixed enum (`OSD`, `RATES`, `TUNE`, `FILTERS`, …).
+- **Category** — fixed enum (`OSD`, `RATES`, `MODES`, `TUNE`, `FILTERS`, …).
 - **Family / quad / style** — carried by `TITLE` and `KEYWORDS` in the file
   header, which is what the Presets tab's filter dropdowns and search box read.
   Directories are human organization only; they do not affect filtering.
@@ -26,25 +26,22 @@ you filter on in the UI.
 
 | File | Category | Firmware | Payload |
 |---|---|---|---|
-| `presets/4.5/rates/whoop_rates_cori.txt` | RATES | 4.3, 4.4, 4.5, 2025.12, 2026.6 | all four whoop rate profiles |
-| `presets/4.3/osd/whoop_osd_cori.txt` | OSD | 4.3 | 91 OSD params (4.3 subset) |
+| `presets/4.5/rates/whoop_rates_cori.txt` | RATES | 4.4, 4.5, 2025.12, 2026.6 | all four whoop rate profiles |
+| `presets/4.5/modes/whoop_modes_cori.txt` | MODES | 4.4, 4.5, 2025.12, 2026.6 | 20 mode slots + 30 adjustment slots |
 | `presets/4.5/osd/whoop_osd_cori.txt` | OSD | 4.4, 4.5 | 116 OSD params |
 | `presets/2026.6/osd/whoop_osd_cori.txt` | OSD | 2025.12, 2026.6 | 115 OSD params |
 
 Source of truth: CLI dump `BTFL_cli_WHOOZAT_20261102_225835_BETAFPVG473.txt`
 (Betaflight 4.5.0, config rev `93dfc69`) from **Whoozat**, a BetaFPV Air65 65mm
 whoop (BETAFPVG473 / STM32G47X). Whoozat is the whoop-family baseline: its OSD
-layout and rate profiles *are* the whoop presets.
+layout, rate profiles, modes and adjustments *are* the whoop presets.
 
-### Why the OSD preset has three variants
+### Why the OSD preset has two variants
 
 The payload is not portable across the whole range, so it is split where the
 firmware actually differs. Every `set` line in each file was checked against that
 version's `src/main/cli/settings.c`:
 
-- **4.3** predates the stats/warnings bitmasks, the AUX channel element, the MSP
-  displayport system elements, canvas size and craft-name messages — 26 params
-  omitted (4.3 uses per-item `osd_warn_*` / `osd_stat_*` settings instead).
 - **4.4 / 4.5** differ only by `osd_gps_sats_show_pdop` (absent before 4.5; its
   default is OFF, matching the source quad), so they share one file.
 - **2025.12 / 2026.6** — `osd_canvas_width` / `osd_canvas_height` moved behind
@@ -53,15 +50,20 @@ version's `src/main/cli/settings.c`:
   saved, but the OSD warning list was reordered and extended after 4.5, so review
   the enabled warnings after applying.
 
-The **rates** payload needs no splitting: every parameter and value exists with a
-compatible range on 4.3, 4.4, 4.5, 2025.12 and 2026.6, so one file covers all of
-them. It switches `rateprofile 0–3` in one pass and leaves profile 0 selected.
+**Rates, modes and adjustments need no splitting** — every parameter, line format
+and value was verified against 4.4, 4.5, 2025.12 and 2026.6, so one file each
+covers all of them:
+
+- **Rates** switches `rateprofile 0–3` in one pass and leaves profile 0 selected.
+- **Modes** writes all 20 mode slots and all 30 adjustment slots, including the
+  empty ones, so applying it reproduces the source configuration exactly instead
+  of leaving existing unused slots in place.
 
 ## Using it in Betaflight Configurator
 
 1. In Configurator, go to **Presets → Preset Sources**.
 2. Add a source with:
-   - **URL**: `https://github.com/<your-account>/bf-presets-whoozat`
+   - **URL**: `https://github.com/<your-account>/bf-presets`
    - **GitHub branch**: `main`
 3. Presets appear filtered by the connected FC's firmware version.
 

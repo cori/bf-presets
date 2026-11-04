@@ -136,11 +136,11 @@
     "firmware_version": [
       "2025.12",
       "2026.6",
-      "4.3",
       "4.4",
       "4.5"
     ],
     "category": [
+      "MODES",
       "OSD",
       "RATES"
     ],
@@ -150,13 +150,17 @@
     "keywords": [
       "65mm",
       "actual",
+      "adjrange",
+      "adjustments",
       "air65",
       "analog",
+      "aux",
       "betafpv",
       "cori",
       "freestyle",
       "g473",
       "hdzero",
+      "modes",
       "osd",
       "race",
       "rates",
@@ -192,13 +196,16 @@
       "priority": 0
     },
     {
-      "fullPath": "presets/4.3/osd/whoop_osd_cori.txt",
-      "hash": "7aac3d684cf3e9b64f6f57353568ed86b81e7da57f73fde816112940412f3dc0",
-      "title": "Whoop OSD by cori",
+      "fullPath": "presets/4.5/modes/whoop_modes_cori.txt",
+      "hash": "78a74a2855d6361efe448e7a246e2e7e35363d7bf5c6b46fe58b12c386af2d99",
+      "title": "Whoop Modes & Adjustments by cori",
       "firmware_version": [
-        "4.3"
+        "4.4",
+        "4.5",
+        "2025.12",
+        "2026.6"
       ],
-      "category": "OSD",
+      "category": "MODES",
       "status": "COMMUNITY",
       "keywords": [
         "whoop",
@@ -207,9 +214,10 @@
         "g473",
         "whoozat",
         "air65",
-        "osd",
-        "hdzero",
-        "analog",
+        "modes",
+        "adjustments",
+        "aux",
+        "adjrange",
         "cori"
       ],
       "author": "cori",
@@ -242,10 +250,9 @@
     },
     {
       "fullPath": "presets/4.5/rates/whoop_rates_cori.txt",
-      "hash": "16927db87af6c9ac90bd57a938cbf4973662f603c7b964695aa4ae458759eeff",
+      "hash": "cff32709114598a7c1eca1ad501e02a8245025f067f7b6f6a12966e00c431e37",
       "title": "Whoop Rates by cori",
       "firmware_version": [
-        "4.3",
         "4.4",
         "4.5",
         "2025.12",
