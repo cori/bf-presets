@@ -10,6 +10,7 @@
 #$ DESCRIPTION: Element positions carry the OSD-profile visibility bits (bits 11-13: visible in profiles 1/2/3) exactly as stored on the FC, and the active OSD profile is set to 1.
 #$ DESCRIPTION: osd_canvas_width and osd_canvas_height are omitted: from 2025.12 onward they moved behind the OSD_CANVAS_SIZE_DEBUG build flag and no longer exist on stock builds (applying them would raise "Invalid name").
 #$ DESCRIPTION: The warnings bitmask is kept as saved, but the OSD warning list was reordered and extended after 4.5, so review the enabled warnings after applying.
+#$ DESCRIPTION: osd_nvario_pos is omitted: it only exists on targets with a barometer or GPS (the USE_VARIO build flag), so a quad without either would raise "Invalid name". A quad that does have a vario keeps its own value for that element.
 #$ WARNING: Applying a preset permanently changes your configuration. Back up first with the CLI ("dump all") and know how to restore it.
 
 set osd_units = IMPERIAL
@@ -79,7 +80,6 @@ set osd_disarmed_pos = 267
 set osd_nheading_pos = 341
 set osd_up_down_reference_pos = 312
 set osd_ready_mode_pos = 341
-set osd_nvario_pos = 341
 set osd_esc_tmp_pos = 163
 set osd_esc_rpm_pos = 150
 set osd_esc_rpm_freq_pos = 341

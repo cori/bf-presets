@@ -9,6 +9,7 @@
 #$ DESCRIPTION: Contains the OSD alarms, timers, element positions, stats and warnings bitmasks, stick overlay, camera frame and displayport settings as saved on the quad.
 #$ DESCRIPTION: Element positions carry the OSD-profile visibility bits (bits 11-13: visible in profiles 1/2/3) exactly as stored on the FC, and the active OSD profile is set to 1.
 #$ DESCRIPTION: osd_gps_sats_show_pdop is omitted (it does not exist before 4.5); its default is OFF, matching the value on the source quad.
+#$ DESCRIPTION: osd_nvario_pos is omitted: it only exists on targets with a barometer or GPS (the USE_VARIO build flag), so a quad without either would raise "Invalid name". A quad that does have a vario keeps its own value for that element.
 #$ WARNING: Applying a preset permanently changes your configuration. Back up first with the CLI ("dump all") and know how to restore it.
 
 set osd_units = IMPERIAL
@@ -78,7 +79,6 @@ set osd_disarmed_pos = 267
 set osd_nheading_pos = 341
 set osd_up_down_reference_pos = 312
 set osd_ready_mode_pos = 341
-set osd_nvario_pos = 341
 set osd_esc_tmp_pos = 163
 set osd_esc_rpm_pos = 150
 set osd_esc_rpm_freq_pos = 341

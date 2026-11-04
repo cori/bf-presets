@@ -28,8 +28,8 @@ you filter on in the UI.
 |---|---|---|---|
 | `presets/4.5/rates/whoop_rates_fablefpv.txt` | RATES | 4.4, 4.5, 2025.12, 2026.6 | all four whoop rate profiles |
 | `presets/4.5/modes/whoop_modes_fablefpv.txt` | MODES | 4.4, 4.5, 2025.12, 2026.6 | 20 mode slots + 30 adjustment slots |
-| `presets/4.5/osd/whoop_osd_fablefpv.txt` | OSD | 4.4, 4.5 | 116 OSD params |
-| `presets/2026.6/osd/whoop_osd_fablefpv.txt` | OSD | 2025.12, 2026.6 | 115 OSD params |
+| `presets/4.5/osd/whoop_osd_fablefpv.txt` | OSD | 4.4, 4.5 | 115 OSD params |
+| `presets/2026.6/osd/whoop_osd_fablefpv.txt` | OSD | 2025.12, 2026.6 | 114 OSD params |
 
 Source of truth: CLI dump `BTFL_cli_WHOOZAT_20261102_225835_BETAFPVG473.txt`
 (Betaflight 4.5.0, config rev `93dfc69`) from **Whoozat**, a BetaFPV Air65 65mm
@@ -49,6 +49,11 @@ version's `src/main/cli/settings.c`:
   applying them would raise `Invalid name`. The warnings bitmask is kept as
   saved, but the OSD warning list was reordered and extended after 4.5, so review
   the enabled warnings after applying.
+- **Both** omit `osd_nvario_pos`: it only exists on targets with a barometer or
+  GPS (the `USE_VARIO` build flag, enabled in `target/common_post.h` only when
+  `USE_BARO` or `USE_GPS` is defined). A quad with neither raises
+  `Invalid name` on it. Quads that do have a vario simply keep their own value
+  for that element.
 
 **Rates, modes and adjustments need no splitting** — every parameter, line format
 and value was verified against 4.4, 4.5, 2025.12 and 2026.6, so one file each

@@ -172,7 +172,7 @@
   "presets": [
     {
       "fullPath": "presets/2026.6/osd/whoop_osd_fablefpv.txt",
-      "hash": "d5e02211eb68005a3c137124cd8620d3d34c3d7fd187955e246e8d97add42726",
+      "hash": "61c7f40dc3fe1f7582acf944894bd76fd761d011c2c4d1b216e70e9b1596db49",
       "title": "Whoop OSD by fablefpv",
       "firmware_version": [
         "2025.12",
@@ -225,7 +225,7 @@
     },
     {
       "fullPath": "presets/4.5/osd/whoop_osd_fablefpv.txt",
-      "hash": "095d043c6563e69522cca64d471e81b6fb2a551c8e58fb72baace86c517a186f",
+      "hash": "eedbd71f31a7afd2962b49041c410e09e8a3833fae948bfba0d698729be366b7",
       "title": "Whoop OSD by fablefpv",
       "firmware_version": [
         "4.4",
