@@ -1,0 +1,92 @@
+#$ TITLE: Whoozat Air65 Rates by cori
+#$ FIRMWARE_VERSION: 4.5
+#$ CATEGORY: RATES
+#$ STATUS: COMMUNITY
+#$ KEYWORDS: whoozat, air65, betafpv, g473, 65mm, whoop, rates, actual, race, freestyle, sbang, cori
+#$ AUTHOR: cori
+#$ DESCRIPTION: All four rate profiles from "Whoozat" (BetaFPV Air65 65mm whoop), ACTUAL rates type, taken verbatim from the flight controller CLI dump of 2026-11-02 (Betaflight 4.5.0).
+#$ DESCRIPTION: Profile 0 "RaceXpo" (rc_rate 15, srate 53), profile 1 "JuicyXpo" (rc_rate 23, srate 89), profile 2 "SbangXpo" (rc_rate 30, srate 130, thr_expo 31), profile 3 "SBANG" (rc_rate 30, srate 130). Throttle limits: 65% on profiles 0 and 3, 85% on profile 1, off on profile 2.
+#$ DESCRIPTION: The preset writes all four profiles in one pass: it switches rateprofile 0-3 in turn and leaves rateprofile 0 selected at the end.
+#$ WARNING: Applying a preset permanently changes your configuration. Back up first with the CLI ("dump all") and know how to restore it.
+
+rateprofile 0
+set rateprofile_name = RaceXpo
+set thr_mid = 49
+set thr_expo = 0
+set rates_type = ACTUAL
+set quickrates_rc_expo = OFF
+set roll_rc_rate = 15
+set pitch_rc_rate = 15
+set yaw_rc_rate = 15
+set roll_expo = 0
+set pitch_expo = 0
+set yaw_expo = 0
+set roll_srate = 53
+set pitch_srate = 53
+set yaw_srate = 53
+set throttle_limit_type = SCALE
+set throttle_limit_percent = 65
+set roll_rate_limit = 1998
+set pitch_rate_limit = 1998
+set yaw_rate_limit = 1998
+rateprofile 1
+set rateprofile_name = JuicyXpo
+set thr_mid = 37
+set thr_expo = 0
+set rates_type = ACTUAL
+set quickrates_rc_expo = OFF
+set roll_rc_rate = 23
+set pitch_rc_rate = 23
+set yaw_rc_rate = 23
+set roll_expo = 0
+set pitch_expo = 0
+set yaw_expo = 0
+set roll_srate = 89
+set pitch_srate = 89
+set yaw_srate = 89
+set throttle_limit_type = SCALE
+set throttle_limit_percent = 85
+set roll_rate_limit = 1998
+set pitch_rate_limit = 1998
+set yaw_rate_limit = 1998
+rateprofile 2
+set rateprofile_name = SbangXpo
+set thr_mid = 23
+set thr_expo = 31
+set rates_type = ACTUAL
+set quickrates_rc_expo = OFF
+set roll_rc_rate = 30
+set pitch_rc_rate = 30
+set yaw_rc_rate = 30
+set roll_expo = 0
+set pitch_expo = 0
+set yaw_expo = 0
+set roll_srate = 130
+set pitch_srate = 130
+set yaw_srate = 130
+set throttle_limit_type = OFF
+set throttle_limit_percent = 65
+set roll_rate_limit = 1998
+set pitch_rate_limit = 1998
+set yaw_rate_limit = 1998
+rateprofile 3
+set rateprofile_name = SBANG
+set thr_mid = 33
+set thr_expo = 0
+set rates_type = ACTUAL
+set quickrates_rc_expo = OFF
+set roll_rc_rate = 30
+set pitch_rc_rate = 30
+set yaw_rc_rate = 30
+set roll_expo = 0
+set pitch_expo = 0
+set yaw_expo = 0
+set roll_srate = 130
+set pitch_srate = 130
+set yaw_srate = 130
+set throttle_limit_type = OFF
+set throttle_limit_percent = 65
+set roll_rate_limit = 1998
+set pitch_rate_limit = 1998
+set yaw_rate_limit = 1998
+rateprofile 0
