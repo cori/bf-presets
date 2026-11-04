@@ -1,12 +1,12 @@
-#$ TITLE: Whoop Modes & Adjustments by cori
+#$ TITLE: Whoop Modes & Adjustments by fablefpv
 #$ FIRMWARE_VERSION: 4.4
 #$ FIRMWARE_VERSION: 4.5
 #$ FIRMWARE_VERSION: 2025.12
 #$ FIRMWARE_VERSION: 2026.6
 #$ CATEGORY: MODES
 #$ STATUS: COMMUNITY
-#$ KEYWORDS: whoop, 65mm, betafpv, g473, whoozat, air65, modes, adjustments, aux, adjrange, cori
-#$ AUTHOR: cori
+#$ KEYWORDS: whoop, 65mm, betafpv, g473, whoozat, air65, modes, adjustments, aux, adjrange, fablefpv
+#$ AUTHOR: fablefpv
 #$ DESCRIPTION: Mode switch and in-flight adjustment configuration for the whoop family, taken from "Whoozat" (BetaFPV Air65 65mm whoop) CLI dump of 2026-11-02 (Betaflight 4.5.0).
 #$ DESCRIPTION: Modes: ARM on AUX1 (1700-2100) and AUX5 (1700-2100); HORIZON on AUX2 (1675-2100); AIR MODE on AUX2 (900-1300); FLIP OVER AFTER CRASH on AUX5 (1700-2100).
 #$ DESCRIPTION: Adjustments: RATE_PROFILE driven by AUX4 (1750-2100), selecting on AUX3; THROTTLE_EXPO driven by AUX8 (900-2100), selecting on AUX8.

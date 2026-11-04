@@ -1,10 +1,10 @@
-#$ TITLE: Whoop OSD by cori
+#$ TITLE: Whoop OSD by fablefpv
 #$ FIRMWARE_VERSION: 2025.12
 #$ FIRMWARE_VERSION: 2026.6
 #$ CATEGORY: OSD
 #$ STATUS: COMMUNITY
-#$ KEYWORDS: whoop, 65mm, betafpv, g473, whoozat, air65, osd, hdzero, analog, cori
-#$ AUTHOR: cori
+#$ KEYWORDS: whoop, 65mm, betafpv, g473, whoozat, air65, osd, hdzero, analog, fablefpv
+#$ AUTHOR: fablefpv
 #$ DESCRIPTION: Whoop-family OSD layout, taken from "Whoozat" (BetaFPV Air65 65mm whoop, BETAFPVG473 / STM32G47X) CLI dump of 2026-11-02 (Betaflight 4.5.0).
 #$ DESCRIPTION: Contains the OSD alarms, timers, element positions, stats and warnings bitmasks, stick overlay, camera frame and displayport settings as saved on the quad.
 #$ DESCRIPTION: Element positions carry the OSD-profile visibility bits (bits 11-13: visible in profiles 1/2/3) exactly as stored on the FC, and the active OSD profile is set to 1.

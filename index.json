@@ -145,7 +145,7 @@
       "RATES"
     ],
     "author": [
-      "cori"
+      "fablefpv"
     ],
     "keywords": [
       "65mm",
@@ -156,7 +156,7 @@
       "analog",
       "aux",
       "betafpv",
-      "cori",
+      "fablefpv",
       "freestyle",
       "g473",
       "hdzero",
@@ -171,9 +171,9 @@
   },
   "presets": [
     {
-      "fullPath": "presets/2026.6/osd/whoop_osd_cori.txt",
-      "hash": "aadc33af93c97e8e0d847bfa067bca45c3d29515862493146bfd87e7f2c98e9b",
-      "title": "Whoop OSD by cori",
+      "fullPath": "presets/2026.6/osd/whoop_osd_fablefpv.txt",
+      "hash": "d5e02211eb68005a3c137124cd8620d3d34c3d7fd187955e246e8d97add42726",
+      "title": "Whoop OSD by fablefpv",
       "firmware_version": [
         "2025.12",
         "2026.6"
@@ -190,15 +190,15 @@
         "osd",
         "hdzero",
         "analog",
-        "cori"
+        "fablefpv"
       ],
-      "author": "cori",
+      "author": "fablefpv",
       "priority": 0
     },
     {
-      "fullPath": "presets/4.5/modes/whoop_modes_cori.txt",
-      "hash": "78a74a2855d6361efe448e7a246e2e7e35363d7bf5c6b46fe58b12c386af2d99",
-      "title": "Whoop Modes & Adjustments by cori",
+      "fullPath": "presets/4.5/modes/whoop_modes_fablefpv.txt",
+      "hash": "4e12514bffc4b03c17e06279da4be2f1820866350cda7ffa4b8b05fb14fae210",
+      "title": "Whoop Modes & Adjustments by fablefpv",
       "firmware_version": [
         "4.4",
         "4.5",
@@ -218,15 +218,15 @@
         "adjustments",
         "aux",
         "adjrange",
-        "cori"
+        "fablefpv"
       ],
-      "author": "cori",
+      "author": "fablefpv",
       "priority": 0
     },
     {
-      "fullPath": "presets/4.5/osd/whoop_osd_cori.txt",
-      "hash": "19a4da8b73d30275581a7afaa8f59ede353f29951726fc60ec78d013f99f326c",
-      "title": "Whoop OSD by cori",
+      "fullPath": "presets/4.5/osd/whoop_osd_fablefpv.txt",
+      "hash": "095d043c6563e69522cca64d471e81b6fb2a551c8e58fb72baace86c517a186f",
+      "title": "Whoop OSD by fablefpv",
       "firmware_version": [
         "4.4",
         "4.5"
@@ -243,15 +243,15 @@
         "osd",
         "hdzero",
         "analog",
-        "cori"
+        "fablefpv"
       ],
-      "author": "cori",
+      "author": "fablefpv",
       "priority": 0
     },
     {
-      "fullPath": "presets/4.5/rates/whoop_rates_cori.txt",
-      "hash": "cff32709114598a7c1eca1ad501e02a8245025f067f7b6f6a12966e00c431e37",
-      "title": "Whoop Rates by cori",
+      "fullPath": "presets/4.5/rates/whoop_rates_fablefpv.txt",
+      "hash": "447626fb572cd43762cdda0468b7292be1da059a27baeee50bdab75de3df80da",
+      "title": "Whoop Rates by fablefpv",
       "firmware_version": [
         "4.4",
         "4.5",
@@ -272,9 +272,9 @@
         "race",
         "freestyle",
         "sbang",
-        "cori"
+        "fablefpv"
       ],
-      "author": "cori",
+      "author": "fablefpv",
       "priority": 10000
     }
   ]

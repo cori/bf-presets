@@ -1,4 +1,4 @@
-# cori's Betaflight presets
+# fablefpv's Betaflight presets
 
 Personal Betaflight preset repository. It follows the layout of
 [betaflight/firmware-presets](https://github.com/betaflight/firmware-presets) so
@@ -26,10 +26,10 @@ you filter on in the UI.
 
 | File | Category | Firmware | Payload |
 |---|---|---|---|
-| `presets/4.5/rates/whoop_rates_cori.txt` | RATES | 4.4, 4.5, 2025.12, 2026.6 | all four whoop rate profiles |
-| `presets/4.5/modes/whoop_modes_cori.txt` | MODES | 4.4, 4.5, 2025.12, 2026.6 | 20 mode slots + 30 adjustment slots |
-| `presets/4.5/osd/whoop_osd_cori.txt` | OSD | 4.4, 4.5 | 116 OSD params |
-| `presets/2026.6/osd/whoop_osd_cori.txt` | OSD | 2025.12, 2026.6 | 115 OSD params |
+| `presets/4.5/rates/whoop_rates_fablefpv.txt` | RATES | 4.4, 4.5, 2025.12, 2026.6 | all four whoop rate profiles |
+| `presets/4.5/modes/whoop_modes_fablefpv.txt` | MODES | 4.4, 4.5, 2025.12, 2026.6 | 20 mode slots + 30 adjustment slots |
+| `presets/4.5/osd/whoop_osd_fablefpv.txt` | OSD | 4.4, 4.5 | 116 OSD params |
+| `presets/2026.6/osd/whoop_osd_fablefpv.txt` | OSD | 2025.12, 2026.6 | 115 OSD params |
 
 Source of truth: CLI dump `BTFL_cli_WHOOZAT_20261102_225835_BETAFPVG473.txt`
 (Betaflight 4.5.0, config rev `93dfc69`) from **Whoozat**, a BetaFPV Air65 65mm
