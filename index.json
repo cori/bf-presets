@@ -134,7 +134,10 @@
   },
   "uniqueValues": {
     "firmware_version": [
+      "2025.12",
       "2026.6",
+      "4.3",
+      "4.4",
       "4.5"
     ],
     "category": [
@@ -164,21 +167,22 @@
   },
   "presets": [
     {
-      "fullPath": "presets/2026.6/osd/whoozat_osd_cori.txt",
-      "hash": "47d9417bfebbb28d5a95d30d78946f8aaa9c84f620f1e11f61472feb33a623f1",
-      "title": "Whoozat Air65 OSD by cori",
+      "fullPath": "presets/2026.6/osd/whoop_osd_cori.txt",
+      "hash": "aadc33af93c97e8e0d847bfa067bca45c3d29515862493146bfd87e7f2c98e9b",
+      "title": "Whoop OSD by cori",
       "firmware_version": [
+        "2025.12",
         "2026.6"
       ],
       "category": "OSD",
       "status": "COMMUNITY",
       "keywords": [
-        "whoozat",
-        "air65",
+        "whoop",
+        "65mm",
         "betafpv",
         "g473",
-        "65mm",
-        "whoop",
+        "whoozat",
+        "air65",
         "osd",
         "hdzero",
         "analog",
@@ -188,47 +192,21 @@
       "priority": 0
     },
     {
-      "fullPath": "presets/2026.6/rates/whoozat_rates_cori.txt",
-      "hash": "4f2f734482360d9a234e2d34eeebfaad9dc6aa91926dcce416f9489ef3404681",
-      "title": "Whoozat Air65 Rates by cori",
+      "fullPath": "presets/4.3/osd/whoop_osd_cori.txt",
+      "hash": "7aac3d684cf3e9b64f6f57353568ed86b81e7da57f73fde816112940412f3dc0",
+      "title": "Whoop OSD by cori",
       "firmware_version": [
-        "2026.6"
-      ],
-      "category": "RATES",
-      "status": "COMMUNITY",
-      "keywords": [
-        "whoozat",
-        "air65",
-        "betafpv",
-        "g473",
-        "65mm",
-        "whoop",
-        "rates",
-        "actual",
-        "race",
-        "freestyle",
-        "sbang",
-        "cori"
-      ],
-      "author": "cori",
-      "priority": 10000
-    },
-    {
-      "fullPath": "presets/4.5/osd/whoozat_osd_cori.txt",
-      "hash": "f3700805fe81e4fe5714fba0d35fb2ebd502653aefbb8b48cdc0cd660b37a153",
-      "title": "Whoozat Air65 OSD by cori",
-      "firmware_version": [
-        "4.5"
+        "4.3"
       ],
       "category": "OSD",
       "status": "COMMUNITY",
       "keywords": [
-        "whoozat",
-        "air65",
+        "whoop",
+        "65mm",
         "betafpv",
         "g473",
-        "65mm",
-        "whoop",
+        "whoozat",
+        "air65",
         "osd",
         "hdzero",
         "analog",
@@ -238,21 +216,50 @@
       "priority": 0
     },
     {
-      "fullPath": "presets/4.5/rates/whoozat_rates_cori.txt",
-      "hash": "a663265d5efe5c161a6a3110a25d3d33cae9e7502308236d74f08791ea76ec7f",
-      "title": "Whoozat Air65 Rates by cori",
+      "fullPath": "presets/4.5/osd/whoop_osd_cori.txt",
+      "hash": "19a4da8b73d30275581a7afaa8f59ede353f29951726fc60ec78d013f99f326c",
+      "title": "Whoop OSD by cori",
       "firmware_version": [
+        "4.4",
         "4.5"
+      ],
+      "category": "OSD",
+      "status": "COMMUNITY",
+      "keywords": [
+        "whoop",
+        "65mm",
+        "betafpv",
+        "g473",
+        "whoozat",
+        "air65",
+        "osd",
+        "hdzero",
+        "analog",
+        "cori"
+      ],
+      "author": "cori",
+      "priority": 0
+    },
+    {
+      "fullPath": "presets/4.5/rates/whoop_rates_cori.txt",
+      "hash": "16927db87af6c9ac90bd57a938cbf4973662f603c7b964695aa4ae458759eeff",
+      "title": "Whoop Rates by cori",
+      "firmware_version": [
+        "4.3",
+        "4.4",
+        "4.5",
+        "2025.12",
+        "2026.6"
       ],
       "category": "RATES",
       "status": "COMMUNITY",
       "keywords": [
-        "whoozat",
-        "air65",
+        "whoop",
+        "65mm",
         "betafpv",
         "g473",
-        "65mm",
-        "whoop",
+        "whoozat",
+        "air65",
         "rates",
         "actual",
         "race",

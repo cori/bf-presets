@@ -1,21 +1,19 @@
-#$ TITLE: Whoozat Air65 OSD by cori
-#$ FIRMWARE_VERSION: 2026.6
+#$ TITLE: Whoop OSD by cori
+#$ FIRMWARE_VERSION: 4.3
 #$ CATEGORY: OSD
 #$ STATUS: COMMUNITY
-#$ KEYWORDS: whoozat, air65, betafpv, g473, 65mm, whoop, osd, hdzero, analog, cori
+#$ KEYWORDS: whoop, 65mm, betafpv, g473, whoozat, air65, osd, hdzero, analog, cori
 #$ AUTHOR: cori
-#$ DESCRIPTION: Complete OSD configuration for "Whoozat" (BetaFPV Air65 65mm whoop, BETAFPVG473 / STM32G47X), ported from the flight controller CLI dump of 2026-11-02 (originally Betaflight 4.5.0) to 2026.6.
-#$ DESCRIPTION: Contains every OSD parameter as saved on the quad: alarms, timers, element positions, stats and warnings bitmasks, stick overlay, camera frame and displayport settings.
+#$ DESCRIPTION: Whoop-family OSD layout, taken from "Whoozat" (BetaFPV Air65 65mm whoop, BETAFPVG473 / STM32G47X) CLI dump of 2026-11-02 (Betaflight 4.5.0).
+#$ DESCRIPTION: Contains the OSD alarms, timers, element positions, stats and warnings bitmasks, stick overlay, camera frame and displayport settings as saved on the quad.
 #$ DESCRIPTION: Element positions carry the OSD-profile visibility bits (bits 11-13: visible in profiles 1/2/3) exactly as stored on the FC, and the active OSD profile is set to 1.
-#$ DESCRIPTION: Two parameters are omitted because they no longer exist on stock 2026.6 builds: osd_canvas_width and osd_canvas_height (moved behind the OSD_CANVAS_SIZE_DEBUG build flag). The warnings bitmask is kept as saved, but the warning list was reordered and extended since 4.5, so review the enabled warnings after applying.
+#$ DESCRIPTION: Betaflight 4.3 predates the stats/warnings bitmasks, the AUX channel element, the MSP displayport system elements, canvas size and craft-name messages, so those 26 parameters are omitted here; the FC keeps its own values for them.
 #$ WARNING: Applying a preset permanently changes your configuration. Back up first with the CLI ("dump all") and know how to restore it.
 
 set osd_units = IMPERIAL
-set osd_warn_bitmask = 312317
 set osd_rssi_alarm = 20
 set osd_link_quality_alarm = 80
 set osd_rssi_dbm_alarm = -99
-set osd_rsnr_alarm = 4
 set osd_cap_alarm = 2200
 set osd_alt_alarm = 100
 set osd_distance_alarm = 0
@@ -35,7 +33,6 @@ set osd_rssi_pos = 226
 set osd_link_quality_pos = 6529
 set osd_link_tx_power_pos = 341
 set osd_rssi_dbm_pos = 2401
-set osd_rsnr_pos = 341
 set osd_tim_1_pos = 386
 set osd_tim_2_pos = 6518
 set osd_remaining_time_estimate_pos = 33
@@ -49,10 +46,8 @@ set osd_ah_sbar_pos = 313
 set osd_ah_pos = 2222
 set osd_current_pos = 352
 set osd_mah_drawn_pos = 386
-set osd_wh_drawn_pos = 341
 set osd_motor_diag_pos = 341
 set osd_craft_name_pos = 6150
-set osd_pilot_name_pos = 6162
 set osd_gps_speed_pos = 341
 set osd_gps_lon_pos = 341
 set osd_gps_lat_pos = 341
@@ -76,7 +71,6 @@ set osd_battery_usage_pos = 341
 set osd_disarmed_pos = 267
 set osd_nheading_pos = 341
 set osd_up_down_reference_pos = 312
-set osd_ready_mode_pos = 341
 set osd_nvario_pos = 341
 set osd_esc_tmp_pos = 163
 set osd_esc_rpm_pos = 150
@@ -96,24 +90,10 @@ set osd_rcchannels_pos = 341
 set osd_camera_frame_pos = 142
 set osd_efficiency_pos = 341
 set osd_total_flights_pos = 341
-set osd_aux_pos = 341
-set osd_sys_goggle_voltage_pos = 341
-set osd_sys_vtx_voltage_pos = 341
-set osd_sys_bitrate_pos = 341
-set osd_sys_delay_pos = 341
-set osd_sys_distance_pos = 341
-set osd_sys_lq_pos = 341
-set osd_sys_goggle_dvr_pos = 341
-set osd_sys_vtx_dvr_pos = 341
-set osd_sys_warnings_pos = 341
-set osd_sys_vtx_temp_pos = 341
-set osd_sys_fan_speed_pos = 341
-set osd_stat_bitmask = 42728236
 set osd_profile = 1
 set osd_profile_1_name = -
 set osd_profile_2_name = -
 set osd_profile_3_name = -
-set osd_gps_sats_show_pdop = OFF
 set osd_displayport_device = AUTO
 set osd_rcchannels = -1,-1,-1,-1
 set osd_camera_frame_width = 24
@@ -121,7 +101,3 @@ set osd_camera_frame_height = 11
 set osd_stat_avg_cell_value = OFF
 set osd_framerate_hz = 12
 set osd_menu_background = TRANSPARENT
-set osd_aux_channel = 1
-set osd_aux_scale = 200
-set osd_aux_symbol = 65
-set osd_craftname_msgs = OFF

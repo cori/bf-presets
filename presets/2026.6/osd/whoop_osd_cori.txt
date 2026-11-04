@@ -1,12 +1,15 @@
-#$ TITLE: Whoozat Air65 OSD by cori
-#$ FIRMWARE_VERSION: 4.5
+#$ TITLE: Whoop OSD by cori
+#$ FIRMWARE_VERSION: 2025.12
+#$ FIRMWARE_VERSION: 2026.6
 #$ CATEGORY: OSD
 #$ STATUS: COMMUNITY
-#$ KEYWORDS: whoozat, air65, betafpv, g473, 65mm, whoop, osd, hdzero, analog, cori
+#$ KEYWORDS: whoop, 65mm, betafpv, g473, whoozat, air65, osd, hdzero, analog, cori
 #$ AUTHOR: cori
-#$ DESCRIPTION: Complete OSD configuration for "Whoozat" (BetaFPV Air65 65mm whoop, BETAFPVG473 / STM32G47X), taken verbatim from the flight controller CLI dump of 2026-11-02 (Betaflight 4.5.0).
-#$ DESCRIPTION: Contains every OSD parameter as saved on the quad: alarms, timers, element positions, stats and warnings bitmasks, stick overlay, camera frame, canvas and displayport settings.
+#$ DESCRIPTION: Whoop-family OSD layout, taken from "Whoozat" (BetaFPV Air65 65mm whoop, BETAFPVG473 / STM32G47X) CLI dump of 2026-11-02 (Betaflight 4.5.0).
+#$ DESCRIPTION: Contains the OSD alarms, timers, element positions, stats and warnings bitmasks, stick overlay, camera frame and displayport settings as saved on the quad.
 #$ DESCRIPTION: Element positions carry the OSD-profile visibility bits (bits 11-13: visible in profiles 1/2/3) exactly as stored on the FC, and the active OSD profile is set to 1.
+#$ DESCRIPTION: osd_canvas_width and osd_canvas_height are omitted: from 2025.12 onward they moved behind the OSD_CANVAS_SIZE_DEBUG build flag and no longer exist on stock builds (applying them would raise "Invalid name").
+#$ DESCRIPTION: The warnings bitmask is kept as saved, but the OSD warning list was reordered and extended after 4.5, so review the enabled warnings after applying.
 #$ WARNING: Applying a preset permanently changes your configuration. Back up first with the CLI ("dump all") and know how to restore it.
 
 set osd_units = IMPERIAL
@@ -123,6 +126,4 @@ set osd_menu_background = TRANSPARENT
 set osd_aux_channel = 1
 set osd_aux_scale = 200
 set osd_aux_symbol = 65
-set osd_canvas_width = 30
-set osd_canvas_height = 13
 set osd_craftname_msgs = OFF
