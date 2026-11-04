@@ -142,7 +142,8 @@
     "category": [
       "MODES",
       "OSD",
-      "RATES"
+      "RATES",
+      "VTX"
     ],
     "author": [
       "fablefpv"
@@ -155,21 +156,60 @@
       "air65",
       "analog",
       "aux",
+      "bbxless",
       "betafpv",
+      "debug",
+      "dvr",
       "fablefpv",
+      "fatshark",
       "freestyle",
       "g473",
       "hdzero",
+      "hummingroach",
+      "lowrace",
       "modes",
+      "no-blackbox",
       "osd",
+      "profile2",
       "race",
+      "raceband",
       "rates",
       "sbang",
+      "video",
+      "vtx",
       "whoop",
       "whoozat"
     ]
   },
   "presets": [
+    {
+      "fullPath": "presets/2026.6/osd/whoop_osd_dvr_fablefpv.txt",
+      "hash": "36ccfe4d77feb9b6836a4b487a77838983e38aa3935017456882804a712ead43",
+      "title": "Whoop DVR OSD by fablefpv",
+      "firmware_version": [
+        "2025.12",
+        "2026.6"
+      ],
+      "category": "OSD",
+      "status": "COMMUNITY",
+      "keywords": [
+        "whoop",
+        "65mm",
+        "betafpv",
+        "hummingroach",
+        "osd",
+        "dvr",
+        "debug",
+        "profile2",
+        "no-blackbox",
+        "bbxless",
+        "hdzero",
+        "analog",
+        "fablefpv"
+      ],
+      "author": "fablefpv",
+      "priority": 0
+    },
     {
       "fullPath": "presets/2026.6/osd/whoop_osd_fablefpv.txt",
       "hash": "61c7f40dc3fe1f7582acf944894bd76fd761d011c2c4d1b216e70e9b1596db49",
@@ -218,6 +258,34 @@
         "adjustments",
         "aux",
         "adjrange",
+        "fablefpv"
+      ],
+      "author": "fablefpv",
+      "priority": 0
+    },
+    {
+      "fullPath": "presets/4.5/osd/whoop_osd_dvr_fablefpv.txt",
+      "hash": "95a3ad14f7707f9b14eba7cb3c5f567b7435584941db2f0b60a03b513d7a5d4d",
+      "title": "Whoop DVR OSD by fablefpv",
+      "firmware_version": [
+        "4.4",
+        "4.5"
+      ],
+      "category": "OSD",
+      "status": "COMMUNITY",
+      "keywords": [
+        "whoop",
+        "65mm",
+        "betafpv",
+        "hummingroach",
+        "osd",
+        "dvr",
+        "debug",
+        "profile2",
+        "no-blackbox",
+        "bbxless",
+        "hdzero",
+        "analog",
         "fablefpv"
       ],
       "author": "fablefpv",
@@ -276,6 +344,34 @@
       ],
       "author": "fablefpv",
       "priority": 10000
+    },
+    {
+      "fullPath": "presets/4.5/vtx/whoop_vtx_fablefpv.txt",
+      "hash": "83aa46e173bc61cdb079bb0285c508e6d8b737eed6ef671b11ce002e0c19317d",
+      "title": "Whoop VTX (AUX control) by fablefpv",
+      "firmware_version": [
+        "4.4",
+        "4.5",
+        "2025.12",
+        "2026.6"
+      ],
+      "category": "VTX",
+      "status": "COMMUNITY",
+      "keywords": [
+        "whoop",
+        "65mm",
+        "betafpv",
+        "g473",
+        "vtx",
+        "aux",
+        "lowrace",
+        "raceband",
+        "fatshark",
+        "video",
+        "fablefpv"
+      ],
+      "author": "fablefpv",
+      "priority": 1000000
     }
   ]
 }
