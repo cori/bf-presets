@@ -95,10 +95,19 @@ is the value that gets saved — a hand-set power can never survive a reboot.
 The constraint is only about the row that *contains* 1500: levels may well be
 forced on either side of it, so the ladder can be split around midrc.
 
-The **power index** is an index into *that quad's own* VTX table — it is **not**
-a universal power level. The CLI validates it against the table's level count,
-so a power above it is rejected with `invalid argument count` and the whole row
-is cleared. Read your quad's table with:
+The **power** in a row is the **VTX device's own power value** — it is **not** a
+universal power level. Each quad's `vtxtable` lists the mapping: `powervalues`
+holds the device value for each entry and `powerlabels` the label for it. The
+CLI checks the row's power against the table's **entry count**, so:
+
+- a power above the count is rejected with `invalid argument count` and the
+  whole row is cleared;
+- a power **one past the end** is accepted by the CLI but the device has no such
+  level, so the row silently does nothing — which is exactly what the
+  HummingRoach's captured configuration had on its top row (`power 3` on a
+  three-level table).
+
+Read your quad's table with:
 
 ```
 vtxtable powerlevels
@@ -106,7 +115,7 @@ vtxtable powervalues
 vtxtable powerlabels
 ```
 
-| VTX family | `powervalues` | labels | usable in a row |
+| VTX family | `powervalues` (device values) | labels | usable in a row |
 |---|---|---|---|
 | BETAFPV G473 — Air65, Whoozat, Vi | `1 2 3 4 0` | 25 / 100 / 200 / 400 / PIT | 1, 2, 3, 4 |
 | Hummingbird, HummingRoach, AcroB, BardoII | `0 1 2` | 25 / 100 / MAX | 1, 2 |
