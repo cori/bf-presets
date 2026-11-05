@@ -75,27 +75,41 @@ version's `src/main/cli/settings.c`:
 
 ### VTX TX-power switch (AUX7)
 
-`whoop_vtx_fablefpv.txt` is a **TX power switch on AUX7**, nothing more. The
-firmware walks the `vtx` rows in order and the **first matching range wins**,
-so the rows must partition the switch travel without overlapping. Band and
-channel are left at `0`, which the firmware reads as "do not change the current
-band or channel", so this preset touches neither the band table, the power
-ladder, nor the selected band/channel/power — the VTX manufacturer settings are
-left exactly as configured.
+`whoop_vtx_fablefpv.txt` is a **TX power switch on AUX7**, nothing more. Band
+and channel are left at `0`, which the firmware reads as "do not change the
+current band or channel", so this preset touches neither the band table, the
+power ladder, nor the selected band/channel/power — the VTX manufacturer
+settings are left exactly as configured.
+
+**An active row always overrides a power you set by hand.** `processRxModes()`
+calls `vtxUpdateActivatedChannel()` on every RX frame, and any row whose AUX
+range is active writes its power into `vtx_power` — the config value, so it
+persists. Set 25 mW in the Configurator and it sticks in the UI, but the FC
+overwrites it as soon as a row matches, and a reconnect re-reads the FC's
+value. Park the switch in a detent no row covers if you want a hand-set power
+to stick.
 
 Power is a level index into the factory ladder (0 = 25 mW, 1 = 100, 2 = 200,
-3 = 400, 4 = PIT). The preset offers three mutually exclusive layouts:
+3 = 400, 4 = PIT). The firmware only applies a row's power when it is **greater
+than zero**, so level 0 — the 25 mW level — can never be selected by a row; it
+means "leave the power as it is". The options therefore use levels 1–4, and the
+5-position option deliberately leaves the lowest detent unmapped so a hand-set
+25 mW survives there.
 
 | Option | Ranges | Power |
 |---|---|---|
-| 2 positions | 900–1500 / 1500–2100 | 25 / 400 mW |
+| 2 positions | 900–1500 / 1500–2100 | 100 / 400 mW |
 | **3 positions** *(default)* | 900–1150 / 1150–1500 / 1500–2100 | 100 / 200 / 400 mW |
-| 5 positions | 900–1150 / 1150–1500 / 1500–1750 / 1750–2000 / 2000–2100 | 25 / 100 / 200 / 400 / PIT |
+| 5 positions | 900–1150 / 1150–1500 / 1500–1750 / 1750–2000 / 2000–2100 | *manual* / 100 / 200 / 400 / PIT |
 
 The 3-position option is the default because it reproduces the captured
 configuration. Note that the original dump's rows 3 and 4 were unreachable —
 row 2 covered 1500–2100 and shadowed them — so the default option clears them
 rather than preserving a dead pair.
+
+Firmware note: 4.5 stops at the first matching row, while 2026.6 applies every
+matching row and lets the highest-indexed one win per field. The rows here are
+disjoint, so it makes no difference — but a hand-set power loses either way.
 
 **Rates, modes and adjustments need no splitting** — every parameter, line format
 and value was verified against 4.4, 4.5, 2025.12 and 2026.6, so one file each
