@@ -8,17 +8,19 @@
 #$ KEYWORDS: whoop, 65mm, betafpv, g473, vtx, aux, aux7, power, lowrace, raceband, video, fablefpv
 #$ AUTHOR: fablefpv
 #$ DESCRIPTION: VTX TX power control on the AUX7 switch, taken from "Whoozat" (BetaFPV Air65 65mm whoop) CLI dump of 2026-11-02 (Betaflight 4.5.0).
-#$ DESCRIPTION: Each vtx row sets the TX power for a range of AUX7. The firmware evaluates the rows on every RX frame and writes the matching row power into vtx_power, so an active row ALWAYS overrides a power you set by hand in the Configurator. Park the switch in a detent that no row covers if you want a hand-set power to survive.
-#$ DESCRIPTION: The firmware only applies a row power when it is greater than zero, so power level 0 (the "25 " level) cannot be selected by a row - it means "leave the power as it is". That is why the lowest detent of the 5-position option is left unmapped: set 25 mW by hand, then leave the switch in the lowest position and it stays.
-#$ DESCRIPTION: Band and channel are left at 0, which the firmware reads as "do not change the current band or channel", so this preset touches neither the band table, the power ladder, nor the selected band/channel/power - the VTX manufacturer settings are left exactly as configured.
-#$ DESCRIPTION: Choose how many power levels the switch steps through. The 3-position option reproduces the captured configuration and is the default. The captured dump also had two further rows that were unreachable, because row 2 covered 1500-2100 and shadowed them.
-#$ DESCRIPTION: Power is a level index into the factory ladder (level 0 = 25 mW, 1 = 100, 2 = 200, 3 = 400, 4 = PIT). Levels 1 to 4 are used here because level 0 is the "do not change" value.
+#$ DESCRIPTION: Each vtx row sets the TX power for a range of AUX7. The firmware evaluates the rows on every RX frame and writes the matching row power into vtx_power, so an active row always overrides a power set by hand in the Configurator.
+#$ DESCRIPTION: The firmware only applies a row power when it is greater than zero, so power level 0 (the "25 " level) cannot be selected by a row - it means "leave the power as it is". The lower detent of the 2-position and 5-position options is therefore left unmapped on purpose, and the option sets vtx_power = 0 so the hand-set value starts at 25 mW.
+#$ DESCRIPTION: Result: with AUX7 in the lower position the VTX stays at 25 mW until you change it; with AUX7 anywhere else it takes that position value. After visiting a higher position the lower one keeps that value, because "leave as set" means leave whatever was last set - re-pick 25 mW in the Video Transmitter tab to go back.
+#$ DESCRIPTION: Band and channel are left at 0, which the firmware reads as "do not change the current band or channel", so this preset touches neither the band table, the power ladder, nor the selected band/channel - the VTX manufacturer settings are left exactly as configured.
+#$ DESCRIPTION: Choose how many power levels the switch steps through. The 3-position option reproduces the captured configuration, in which every detent forces a level. The captured dump also had two further rows that were unreachable, because row 2 covered 1500-2100 and shadowed them.
+#$ DESCRIPTION: Power is a level index into the factory ladder (level 0 = 25 mW, 1 = 100, 2 = 200, 3 = 400, 4 = PIT). Levels 1 to 4 are used for forced positions because level 0 is the "do not change" value.
 #$ DISCLAIMER: The information provided in these presets is for educational and entertainment purposes only. Betaflight makes no representations as to the safety or legality of the use of any information provided herein. End users assume all responsibility and liability for ensuring they comply with all relevant laws and regulations. Using these VTX tables may be in breach of your local RF laws. You as the end user must research and comply with your local regulations. In using these presets, the user assumes any and all liability associated with breaching local regulations.
 #$ WARNING: Applying a preset permanently changes your configuration. Back up first with the CLI ("dump all") and know how to restore it.
 
     #$ OPTION_GROUP BEGIN: (EXCLUSIVE) TX power levels on the AUX7 switch
-    #$ OPTION BEGIN (UNCHECKED): 2 positions - 100 / 400 mW
-    vtx 0 6 0 0 1 900 1500
+    #$ OPTION BEGIN (CHECKED): 2 positions - 25 mW (manual) / 400 mW
+    set vtx_power = 0
+    vtx 0 6 0 0 0 900 1500
     vtx 1 6 0 0 3 1500 2100
     vtx 2 0 0 0 0 900 900
     vtx 3 0 0 0 0 900 900
@@ -29,7 +31,7 @@
     vtx 8 0 0 0 0 900 900
     vtx 9 0 0 0 0 900 900
     #$ OPTION END
-    #$ OPTION BEGIN (CHECKED): 3 positions - 100 / 200 / 400 mW (as captured)
+    #$ OPTION BEGIN (UNCHECKED): 3 positions - 100 / 200 / 400 mW (as captured)
     vtx 0 6 0 0 1 900 1150
     vtx 1 6 0 0 2 1150 1500
     vtx 2 6 0 0 3 1500 2100
@@ -41,7 +43,8 @@
     vtx 8 0 0 0 0 900 900
     vtx 9 0 0 0 0 900 900
     #$ OPTION END
-    #$ OPTION BEGIN (UNCHECKED): 5 positions - manual / 100 / 200 / 400 / PIT
+    #$ OPTION BEGIN (UNCHECKED): 5 positions - 25 mW (manual) / 100 / 200 / 400 / PIT
+    set vtx_power = 0
     vtx 0 6 0 0 0 900 1150
     vtx 1 6 0 0 1 1150 1500
     vtx 2 6 0 0 2 1500 1750

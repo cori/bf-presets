@@ -98,12 +98,23 @@ means "leave the power as it is". The options therefore use levels 1–4, and th
 
 | Option | Ranges | Power |
 |---|---|---|
-| 2 positions | 900–1500 / 1500–2100 | 100 / 400 mW |
-| **3 positions** *(default)* | 900–1150 / 1150–1500 / 1500–2100 | 100 / 200 / 400 mW |
-| 5 positions | 900–1150 / 1150–1500 / 1500–1750 / 1750–2000 / 2000–2100 | *manual* / 100 / 200 / 400 / PIT |
+| **2 positions** *(default)* | 900–1500 / 1500–2100 | 25 mW manual / 400 mW |
+| 3 positions | 900–1150 / 1150–1500 / 1500–2100 | 100 / 200 / 400 mW |
+| 5 positions | 900–1150 / 1150–1500 / 1500–1750 / 1750–2000 / 2000–2100 | 25 mW manual / 100 / 200 / 400 / PIT |
 
-The 3-position option is the default because it reproduces the captured
-configuration. Note that the original dump's rows 3 and 4 were unreachable —
+The lower detent of the 2-position and 5-position options is left unmapped, so a
+power set by hand survives there; both of those options also set `vtx_power = 0`
+so the hand-set value starts at 25 mW. With AUX7 in the lower position the VTX
+stays at 25 mW until you change it; with AUX7 anywhere else it takes that
+position's value.
+
+One catch: "leave as set" means *leave whatever was last set*. Visit a higher
+detent and the lower one keeps that value — re-pick 25 mW in the Video
+Transmitter tab to go back.
+
+The 3-position option reproduces the captured configuration, in which every
+detent forces a level. The captured dump also had two further rows that were
+unreachable —
 row 2 covered 1500–2100 and shadowed them — so the default option clears them
 rather than preserving a dead pair.
 
