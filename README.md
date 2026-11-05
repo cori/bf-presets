@@ -95,6 +95,15 @@ is the value that gets saved — a hand-set power can never survive a reboot.
 The constraint is only about the row that *contains* 1500: levels may well be
 forced on either side of it, so the ladder can be split around midrc.
 
+**Or let midrc land on your lowest tier.** If the tier you want at power-up is
+the lowest one, give that tier the range that contains 1500: the boot then
+forces the lowest tier, which is the safe end of the ladder, and a hand-set
+power is replaced by 25 mW instead of by 200/400 mW. On a ladder whose lowest
+level is device value 0 the same trick is not available — 0 is the "leave the
+power as set" sentinel — so the lowest tier is an *unmapped* row that holds the
+parked power, with midrc inside it. That is what the three-level preset's
+default option does.
+
 The **power** in a row is the **VTX device's own power value** — it is **not** a
 universal power level. Each quad's `vtxtable` lists the mapping: `powervalues`
 holds the device value for each entry and `powerlabels` the label for it. The
@@ -161,7 +170,8 @@ and would fire at every power-up.
 
 | Option | Forced rows | Notes |
 |---|---|---|
-| **3 tiers: 25 / 100 / MAX** *(default)* | 25 @ 900–1150, 100 @ 1150–1475, MAX @ 1525–2100 | mid tier cut short at 1475, gap 1475–1525 |
+| **3 tiers: 25 / 100 / MAX (lowest tier covers midrc)** *(default)* | 25 @ 900–1525, 100 @ 1525–1750, MAX @ 1750–2100 | the boot lands on the **lowest** tier, so the hand-set power is replaced by 25 mW rather than by 200/400 |
+| 3 tiers: 25 / 100 / MAX | 25 @ 900–1150, 100 @ 1150–1475, MAX @ 1525–2100 | mid tier cut short at 1475, gap 1475–1525 |
 | 3 tiers: 25 / 100 / MAX (mid tier split around 1500) | 25 @ 900–1150, 100 @ 1150–1475, 100 @ 1525–1700, MAX @ 1700–2100 | mid tier either side of 1500, gap 1475–1525 |
 | 3 tiers: 25 / 100 / MAX (mid tier covers 1500) | 25 @ 900–1150, 100 @ 1150–1525, MAX @ 1525–2100 | **not boot safe** — 100 mW at every power-up |
 | 3 tiers: 25 / 100 / 200 mW | 25 @ 900–1150, 100 @ 1150–1475, 200 @ 1525–2100 | gentler top for a whoop frame |

@@ -353,7 +353,7 @@
     },
     {
       "fullPath": "presets/4.5/vtx/whoop_vtx_3level_fablefpv.txt",
-      "hash": "8d0fc38a29825456c5a26965d98aee7cd711f458a1efa0cc40bfd244ac195eec",
+      "hash": "2f8987ae57a0f82bfb5c4f5af4c7b6b35cd823232292b82495e3af2748d2b935",
       "title": "Whoop VTX TX-power switch (AUX7), 3-level VTX, by fablefpv",
       "firmware_version": [
         "4.4",
@@ -382,7 +382,7 @@
     },
     {
       "fullPath": "presets/4.5/vtx/whoop_vtx_g473_fablefpv.txt",
-      "hash": "b19eecb94e08f8b00b8771a8d2c99f0bef6930db36e2b335fca28eca1d106e26",
+      "hash": "d6daa9b6d71ea9bc436d0bf4b4ae935668c63dbf926ffb72c524b0624799749a",
       "title": "Whoop VTX TX-power switch (AUX7), BETAFPV G473 VTX, by fablefpv",
       "firmware_version": [
         "4.4",
