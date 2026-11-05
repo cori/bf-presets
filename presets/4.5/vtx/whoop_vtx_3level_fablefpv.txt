@@ -17,7 +17,7 @@
 #$ WARNING: Applying a preset permanently changes your configuration. Back up first with the CLI ("dump all") and know how to restore it.
 
     #$ OPTION_GROUP BEGIN: (EXCLUSIVE) TX power levels on the AUX7 switch
-    #$ OPTION BEGIN (CHECKED): 3 tiers: 25 / 100 / MAX
+    #$ OPTION BEGIN (UNCHECKED): 3 tiers: 25 / 100 / MAX
     set vtx_power = 0
     vtx 0 6 0 0 0 900 1350
     vtx 1 6 0 0 1 1350 1475
@@ -30,7 +30,7 @@
     vtx 8 0 0 0 0 900 900
     vtx 9 0 0 0 0 900 900
     #$ OPTION END
-    #$ OPTION BEGIN (UNCHECKED): 3 tiers: 25 / 100 / MAX (mid tier split around 1500)
+    #$ OPTION BEGIN (CHECKED): 3 tiers: 25 / 100 / MAX (mid tier split around 1500)
     set vtx_power = 0
     vtx 0 6 0 0 0 900 1350
     vtx 1 6 0 0 1 1350 1475

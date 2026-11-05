@@ -75,7 +75,7 @@ version's `src/main/cli/settings.c`:
 
 ### VTX TX-power switch (AUX7)
 
-`whoop_vtx_fablefpv.txt` is a **TX power switch on AUX7**, nothing more. Band
+`whoop_vtx_g473_fablefpv.txt` is a **TX power switch on AUX7**, nothing more. Band
 and channel are left at `0`, which the firmware reads as "do not change the
 current band or channel", so this preset touches neither the band table, the
 power ladder, nor the selected band/channel — the VTX manufacturer settings are
@@ -113,14 +113,22 @@ vtxtable powerlabels
 | NANOHAWK_II | `0` | 25 | — (only the parked value) |
 | MOBULA, PROFER | `1 2 14 20 26` | 0 / RCE / 25 / 100 / 400 | 14, 20, 26 |
 
-So there are two VTX presets:
+So there are two VTX presets, and **pick the one that matches your quad's
+table**:
 
-- **`whoop_vtx_fablefpv.txt`** — BETAFPV G473 (25 / 100 / 200 / 400 / PIT).
+- **`whoop_vtx_g473_fablefpv.txt`** — BETAFPV G473 (25 / 100 / 200 / 400 / PIT).
   On that ladder index 1 = 25 mW, 2 = 100, 3 = 200, 4 = 400 (MAX), 0 = PIT.
 - **`whoop_vtx_3level_fablefpv.txt`** — three-level ladders (25 / 100 / MAX).
   Here index **0 = 25 mW**, which is also the firmware's "leave as set"
   sentinel, so 25 mW can never be forced by a row — it is the parked value
-  (`set vtx_power = 0`), and only indices 1 and 2 can force a level.
+  (`set vtx_power = 0`), and only indices 1 and 2 can force a level. Its switch
+  windows come from the HummingRoach (900–1350 / 1350–1700 / 1700–2100).
+
+The HummingRoach's own captured configuration was written **one index too
+high**: it used powers 1, 2 and 3 on a ladder where 0 is 25 mW, 1 is 100 mW and
+2 is MAX. That meant it ran a step hot (100 mW where 25 mW was intended) and
+its top row pointed at an index the device does not have. The three-level preset
+fixes that.
 
 Applying the G473 preset to a three-level quad fails on the 400 mW row with
 `invalid argument count`; applying the three-level preset to a G473 quietly
