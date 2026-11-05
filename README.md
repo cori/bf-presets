@@ -94,12 +94,37 @@ is the value that gets saved — a hand-set power can never survive a reboot.
 The constraint is only about the row that *contains* 1500: levels may well be
 forced on either side of it, so the ladder can be split around midrc.
 
-The **power index** is the VTX ladder the CLI prints as
-`vtxtable powerlabels 25 100 200 400 PIT`:
+The **power index** is an index into *that quad's own* VTX table — it is **not**
+a universal power level. The CLI validates it against the table's level count,
+so a power above it is rejected with `invalid argument count` and the whole row
+is cleared. Read your quad's table with:
 
-| index | 0 | 1 | 2 | 3 | 4 |
-|---|---|---|---|---|---|
-| level | PIT | 25 mW | 100 mW | 200 mW | 400 mW (MAX) |
+```
+vtxtable powerlevels
+vtxtable powervalues
+vtxtable powerlabels
+```
+
+| VTX family | `powervalues` | labels | usable in a row |
+|---|---|---|---|
+| BETAFPV G473 — Air65, Whoozat, Vi | `1 2 3 4 0` | 25 / 100 / 200 / 400 / PIT | 1, 2, 3, 4 |
+| Hummingbird, HummingRoach, AcroB, BardoII | `0 1 2` | 25 / 100 / MAX | 1, 2 |
+| TINYHAWK_II, NANOHAWK | `0 1 2` | 25 / 100 / 200 | 1, 2 |
+| NANOHAWK_II | `0` | 25 | — (only the parked value) |
+| MOBULA, PROFER | `1 2 14 20 26` | 0 / RCE / 25 / 100 / 400 | 14, 20, 26 |
+
+So there are two VTX presets:
+
+- **`whoop_vtx_fablefpv.txt`** — BETAFPV G473 (25 / 100 / 200 / 400 / PIT).
+  On that ladder index 1 = 25 mW, 2 = 100, 3 = 200, 4 = 400 (MAX), 0 = PIT.
+- **`whoop_vtx_3level_fablefpv.txt`** — three-level ladders (25 / 100 / MAX).
+  Here index **0 = 25 mW**, which is also the firmware's "leave as set"
+  sentinel, so 25 mW can never be forced by a row — it is the parked value
+  (`set vtx_power = 0`), and only indices 1 and 2 can force a level.
+
+Applying the G473 preset to a three-level quad fails on the 400 mW row with
+`invalid argument count`; applying the three-level preset to a G473 quietly
+means 25 mW = 100 mW and MAX = 200 mW. Check the table before you apply.
 
 A row with power `0` means "leave the power as it is" — the firmware only
 applies a row power when it is `> 0` — so **PIT cannot be selected by a row at

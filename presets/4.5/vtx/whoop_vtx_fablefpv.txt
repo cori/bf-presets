@@ -1,18 +1,18 @@
-#$ TITLE: Whoop VTX TX-power switch (AUX7) by fablefpv
+#$ TITLE: Whoop VTX TX-power switch (AUX7), BETAFPV G473 VTX, by fablefpv
 #$ FIRMWARE_VERSION: 4.4
 #$ FIRMWARE_VERSION: 4.5
 #$ FIRMWARE_VERSION: 2025.12
 #$ FIRMWARE_VERSION: 2026.6
 #$ CATEGORY: VTX
 #$ STATUS: COMMUNITY
-#$ KEYWORDS: whoop, 65mm, betafpv, g473, vtx, aux, aux7, power, lowrace, raceband, video, fablefpv
+#$ KEYWORDS: whoop, 65mm, air65, betafpv, g473, vtx, aux, aux7, power, lowrace, raceband, video, fablefpv
 #$ AUTHOR: fablefpv
 #$ DESCRIPTION: VTX TX power control on the AUX7 switch, taken from "Whoozat" (BetaFPV Air65 65mm whoop) CLI dump of 2026-11-02 (Betaflight 4.5.0).
 #$ DESCRIPTION: Each vtx row sets the TX power for a range of AUX7. The firmware evaluates the rows on every RX frame and writes the matching row power into vtx_power, so an active row always overrides a power set by hand in the Configurator.
 #$ DESCRIPTION: IMPORTANT: at power-up every channel reads midrc (1500) until the radio links, and the rows are evaluated straight away. Any forced row whose range contains 1500 therefore forces its power at every power-up, and that is the value that gets saved - a hand-set power can never survive a reboot.
 #$ DESCRIPTION: The 3-tier options are the hummingbird layout - 25 mW, 100 mW and MAX - with the switch windows taken from the mode switch ranges in the same dump (900-1300, 1300-1675, 1675-2100). The mid tier cannot simply be 1300-1675, because that range contains 1500 and would fire at every power-up, so the tier is either cut short at 1475 with a gap up to 1525, split into two rows either side of 1500, or extended over 1500 (which does fire at boot).
 #$ DESCRIPTION: The range boundaries are in microseconds but the CLI floors them to 25 us steps, and the end of a range is exclusive - so the closest usable boundaries either side of midrc are 1475 and 1525.
-#$ DESCRIPTION: The power is an index into the VTX power ladder, which the CLI prints as "vtxtable powerlabels 25 100 200 400 PIT": 1 = 25 mW, 2 = 100 mW, 3 = 200 mW, 4 = 400 mW (MAX), and 0 = PIT. A row with power 0 means "leave the power as it is", because the firmware only applies a row power when it is greater than zero - so PIT cannot be selected by a row at all. It can only be set by hand in the Video Transmitter tab.
+#$ DESCRIPTION: The power is an index into that quad's own VTX table, which for the BETAFPV G473 family is "vtxtable powervalues 1 2 3 4 0" with labels 25 / 100 / 200 / 400 / PIT - so 1 = 25 mW, 2 = 100 mW, 3 = 200 mW, 4 = 400 mW (MAX), and 0 = PIT. The index is NOT universal: the CLI checks it against the table and rejects a power above the table's level count with "invalid argument count", clearing the row. VTXes with a three level ladder (Hummingbird, HummingRoach, AcroB, BardoII, TINYHAWK_II, NANOHAWK) are a different preset - see whoop_vtx_3level_fablefpv.txt. A row with power 0 means "leave the power as it is", because the firmware only applies a row power when it is greater than zero - so PIT cannot be selected by a row at all. It can only be set by hand in the Video Transmitter tab.
 #$ DESCRIPTION: Band and channel are left at 0, which the firmware reads as "do not change the current band or channel", so this preset touches neither the band table, the power ladder, nor the selected band/channel - the VTX manufacturer settings are left exactly as configured.
 #$ DESCRIPTION: Which 3-tier option is right depends on where your radio sends the middle switch position. If it reads below 1475 the first option gives it 100 mW; if it reads exactly 1500 it falls in the first option gap and keeps the last power, so use the split option; if you would rather the middle position always takes 100 mW and do not mind the VTX coming up at 100 mW, use the option that covers 1500.
 #$ DESCRIPTION: The last option reproduces the captured configuration exactly (25 / 100 / 200 / 100 / 200 mW). It is not boot safe: at power-up the 1500 default lands in its 1500-2100 row and forces 200 mW.

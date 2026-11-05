@@ -149,6 +149,9 @@
       "fablefpv"
     ],
     "keywords": [
+      "100",
+      "25",
+      "3-level",
       "65mm",
       "actual",
       "adjrange",
@@ -165,8 +168,10 @@
       "freestyle",
       "g473",
       "hdzero",
+      "hummingbird",
       "hummingroach",
       "lowrace",
+      "max",
       "modes",
       "no-blackbox",
       "osd",
@@ -347,9 +352,38 @@
       "priority": 10000
     },
     {
+      "fullPath": "presets/4.5/vtx/whoop_vtx_3level_fablefpv.txt",
+      "hash": "d38e1e357a45b7c408a5e674989fa6b64e6e4059be4c5c4257ae76e84df2df7c",
+      "title": "Whoop VTX TX-power switch (AUX7), 3-level VTX, by fablefpv",
+      "firmware_version": [
+        "4.4",
+        "4.5",
+        "2025.12",
+        "2026.6"
+      ],
+      "category": "VTX",
+      "status": "COMMUNITY",
+      "keywords": [
+        "whoop",
+        "hummingbird",
+        "hummingroach",
+        "vtx",
+        "aux",
+        "aux7",
+        "power",
+        "3-level",
+        "25",
+        "100",
+        "max",
+        "fablefpv"
+      ],
+      "author": "fablefpv",
+      "priority": 1000000
+    },
+    {
       "fullPath": "presets/4.5/vtx/whoop_vtx_fablefpv.txt",
-      "hash": "b20c346e3ba12b5b20aef0fe37563ae858e29a3bd8920feaadedfd3c8f8fc9c8",
-      "title": "Whoop VTX TX-power switch (AUX7) by fablefpv",
+      "hash": "b19eecb94e08f8b00b8771a8d2c99f0bef6930db36e2b335fca28eca1d106e26",
+      "title": "Whoop VTX TX-power switch (AUX7), BETAFPV G473 VTX, by fablefpv",
       "firmware_version": [
         "4.4",
         "4.5",
@@ -361,6 +395,7 @@
       "keywords": [
         "whoop",
         "65mm",
+        "air65",
         "betafpv",
         "g473",
         "vtx",
