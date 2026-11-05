@@ -91,24 +91,27 @@ overwrites it as soon as a row matches.
 so the rows are evaluated straight away against 1500. Any *forced* row whose
 range contains 1500 therefore forces its power at **every power-up**, and that
 is the value that gets saved — a hand-set power can never survive a reboot.
-This is why the lower detent is left unmapped (power level 0 = "leave the power
-as it is") and why its range runs one 25 µs step past midrc, to 1525.
+The constraint is only about the row that *contains* 1500: levels may well be
+forced on either side of it, so the ladder can be split around midrc.
+
+| Option | Forced rows (power @ range) | Notes |
+|---|---|---|
+| **split around midrc: 100 / 200 / 25 / 400 / PIT** *(default)* | 100 @ 900–1150, 200 @ 1150–1500, 400 @ 1750–2000, PIT @ 2000–2100 | the 1500–1750 row is unmapped, so the mid position holds the hand-set 25 mW |
+| split around midrc: 100 / 200 / 400 / PIT (gap at 1500) | 100 @ 900–1150, 200 @ 1150–1475, 400 @ 1525–2000, PIT @ 2000–2100 | nothing covers 1475–1525, so the mid position keeps the last power |
+| manual (25 mW) / 200 / 400 mW | 200 @ 1525–1800, 400 @ 1800–2100 | one wide unmapped region, 900–1525 |
+| manual (25 mW) / 100 / 200 / 400 mW | 100 @ 1525–1700, 200 @ 1700–1900, 400 @ 1900–2100 | one wide unmapped region, 900–1525 |
+| manual (25 mW) / 100 / 200 / 400 / PIT | 100 @ 1525–1700, 200 @ 1700–1900, 400 @ 1900–2050, PIT @ 2050–2100 | one wide unmapped region, 900–1525 |
+| as captured *(not boot safe)* | 100 @ 900–1150, 200 @ 1150–1500, 400 @ 1500–2100, 200 @ 1750–2000, 400 @ 2000–2100 | the 1500–2100 row fires at every power-up |
 
 Power is a level index into the factory ladder (0 = 25 mW, 1 = 100, 2 = 200,
 3 = 400, 4 = PIT). The firmware only applies a row's power when it is **greater
-than zero**, so level 0 — the 25 mW level — can never be selected by a row.
+than zero**, so level 0 — the 25 mW level — can never be selected by a row; it
+means "leave the power as it is".
 
-| Option | Ranges | Power |
-|---|---|---|
-| **manual / 200 / 400 mW** *(default)* | 900–1525 / 1525–1800 / 1800–2100 | 25 mW manual / 200 / 400 |
-| manual / 100 / 200 / 400 mW | 900–1525 / 1525–1700 / 1700–1900 / 1900–2100 | 25 mW manual / 100 / 200 / 400 |
-| manual / 100 / 200 / 400 / PIT | 900–1525 / 1525–1700 / 1700–1900 / 1900–2050 / 2050–2100 | 25 mW manual / 100 / 200 / 400 / PIT |
-| as captured *(not boot safe)* | 900–1150 / 1150–1500 / 1500–2100 / 1750–2000 / 2000–2100 | 100 / 200 / 400 / 200 / 400 |
-
-With AUX7 in the lower position the VTX stays at the power you set by hand —
-the option sets `vtx_power = 0`, which is 25 mW — and above the boundary the
-switch steps the power. Move the 1525 boundary if your radio sends different
-AUX7 values.
+The first two options use the detent boundaries from the captured Whoozat
+config, so they should line up with the switch on that radio. The "manual"
+options leave the whole lower half of the switch travel holding one hand-set
+power, which means every detent below 1525 reads the same value.
 
 Two version differences worth knowing: 4.5 stops at the first matching row,
 while 2026.6 applies every matching row and lets the highest-indexed one win
