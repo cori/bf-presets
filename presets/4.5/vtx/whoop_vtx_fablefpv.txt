@@ -9,17 +9,70 @@
 #$ AUTHOR: fablefpv
 #$ DESCRIPTION: VTX TX power control on the AUX7 switch, taken from "Whoozat" (BetaFPV Air65 65mm whoop) CLI dump of 2026-11-02 (Betaflight 4.5.0).
 #$ DESCRIPTION: Each vtx row sets the TX power for a range of AUX7. The firmware evaluates the rows on every RX frame and writes the matching row power into vtx_power, so an active row always overrides a power set by hand in the Configurator.
-#$ DESCRIPTION: IMPORTANT: at power-up every channel reads midrc (1500) until the radio links, and the rows are evaluated straight away. Any forced row whose range contains 1500 therefore forces its power at every power-up, and that is the value that gets saved - a hand-set power can never survive a reboot. The options are therefore split around 1500: levels are forced on either side of it and only the row that actually contains 1500 is left unmapped.
+#$ DESCRIPTION: IMPORTANT: at power-up every channel reads midrc (1500) until the radio links, and the rows are evaluated straight away. Any forced row whose range contains 1500 therefore forces its power at every power-up, and that is the value that gets saved - a hand-set power can never survive a reboot.
+#$ DESCRIPTION: The 3-tier options are the hummingbird layout - 25 mW, 100 mW and MAX - with the switch windows taken from the mode switch ranges in the same dump (900-1300, 1300-1675, 1675-2100). The mid tier cannot simply be 1300-1675, because that range contains 1500 and would fire at every power-up, so the tier is either cut short at 1475 with a gap up to 1525, split into two rows either side of 1500, or extended over 1500 (which does fire at boot).
 #$ DESCRIPTION: The range boundaries are in microseconds but the CLI floors them to 25 us steps, and the end of a range is exclusive - so the closest usable boundaries either side of midrc are 1475 and 1525.
-#$ DESCRIPTION: The power is an index into the VTX power ladder, which the CLI prints as "vtxtable powerlabels 25 100 200 400 PIT": 1 = 25 mW, 2 = 100 mW, 3 = 200 mW, 4 = 400 mW, and 0 = PIT. A row with power 0 means "leave the power as it is", because the firmware only applies a row power when it is greater than zero - so PIT cannot be selected by a row at all. It can only be set by hand in the Video Transmitter tab.
+#$ DESCRIPTION: The power is an index into the VTX power ladder, which the CLI prints as "vtxtable powerlabels 25 100 200 400 PIT": 1 = 25 mW, 2 = 100 mW, 3 = 200 mW, 4 = 400 mW (MAX), and 0 = PIT. A row with power 0 means "leave the power as it is", because the firmware only applies a row power when it is greater than zero - so PIT cannot be selected by a row at all. It can only be set by hand in the Video Transmitter tab.
 #$ DESCRIPTION: Band and channel are left at 0, which the firmware reads as "do not change the current band or channel", so this preset touches neither the band table, the power ladder, nor the selected band/channel - the VTX manufacturer settings are left exactly as configured.
-#$ DESCRIPTION: The first option leaves the 1500-1750 position unmapped so it holds the power set by hand - the option sets vtx_power = 1, which is 25 mW - while the positions either side of it step 25 / 100 / 200 / 400 mW. The second option has a narrow gap at 1475-1525 instead of an unmapped row, so that position simply keeps whatever power was last set.
+#$ DESCRIPTION: Which 3-tier option is right depends on where your radio sends the middle switch position. If it reads below 1475 the first option gives it 100 mW; if it reads exactly 1500 it falls in the first option gap and keeps the last power, so use the split option; if you would rather the middle position always takes 100 mW and do not mind the VTX coming up at 100 mW, use the option that covers 1500.
 #$ DESCRIPTION: The last option reproduces the captured configuration exactly (25 / 100 / 200 / 100 / 200 mW). It is not boot safe: at power-up the 1500 default lands in its 1500-2100 row and forces 200 mW.
 #$ DISCLAIMER: The information provided in these presets is for educational and entertainment purposes only. Betaflight makes no representations as to the safety or legality of the use of any information provided herein. End users assume all responsibility and liability for ensuring they comply with all relevant laws and regulations. Using these VTX tables may be in breach of your local RF laws. You as the end user must research and comply with your local regulations. In using these presets, the user assumes any and all liability associated with breaching local regulations.
 #$ WARNING: Applying a preset permanently changes your configuration. Back up first with the CLI ("dump all") and know how to restore it.
 
     #$ OPTION_GROUP BEGIN: (EXCLUSIVE) TX power levels on the AUX7 switch
-    #$ OPTION BEGIN (CHECKED): split around midrc: 25 / 100 / 25 / 200 / 400 mW
+    #$ OPTION BEGIN (CHECKED): 3 tiers: 25 / 100 / MAX
+    set vtx_power = 1
+    vtx 0 6 0 0 1 900 1150
+    vtx 1 6 0 0 2 1150 1475
+    vtx 2 6 0 0 4 1525 2100
+    vtx 3 0 0 0 0 900 900
+    vtx 4 0 0 0 0 900 900
+    vtx 5 0 0 0 0 900 900
+    vtx 6 0 0 0 0 900 900
+    vtx 7 0 0 0 0 900 900
+    vtx 8 0 0 0 0 900 900
+    vtx 9 0 0 0 0 900 900
+    #$ OPTION END
+    #$ OPTION BEGIN (UNCHECKED): 3 tiers: 25 / 100 / MAX (mid tier split around 1500)
+    set vtx_power = 1
+    vtx 0 6 0 0 1 900 1150
+    vtx 1 6 0 0 2 1150 1475
+    vtx 2 6 0 0 2 1525 1700
+    vtx 3 6 0 0 4 1700 2100
+    vtx 4 0 0 0 0 900 900
+    vtx 5 0 0 0 0 900 900
+    vtx 6 0 0 0 0 900 900
+    vtx 7 0 0 0 0 900 900
+    vtx 8 0 0 0 0 900 900
+    vtx 9 0 0 0 0 900 900
+    #$ OPTION END
+    #$ OPTION BEGIN (UNCHECKED): 3 tiers: 25 / 100 / MAX (mid tier covers 1500)
+    set vtx_power = 1
+    vtx 0 6 0 0 1 900 1150
+    vtx 1 6 0 0 2 1150 1525
+    vtx 2 6 0 0 4 1525 2100
+    vtx 3 0 0 0 0 900 900
+    vtx 4 0 0 0 0 900 900
+    vtx 5 0 0 0 0 900 900
+    vtx 6 0 0 0 0 900 900
+    vtx 7 0 0 0 0 900 900
+    vtx 8 0 0 0 0 900 900
+    vtx 9 0 0 0 0 900 900
+    #$ OPTION END
+    #$ OPTION BEGIN (UNCHECKED): 3 tiers: 25 / 100 / 200 mW
+    set vtx_power = 1
+    vtx 0 6 0 0 1 900 1150
+    vtx 1 6 0 0 2 1150 1475
+    vtx 2 6 0 0 3 1525 2100
+    vtx 3 0 0 0 0 900 900
+    vtx 4 0 0 0 0 900 900
+    vtx 5 0 0 0 0 900 900
+    vtx 6 0 0 0 0 900 900
+    vtx 7 0 0 0 0 900 900
+    vtx 8 0 0 0 0 900 900
+    vtx 9 0 0 0 0 900 900
+    #$ OPTION END
+    #$ OPTION BEGIN (UNCHECKED): 5 positions: 25 / 100 / 25 / 200 / MAX
     set vtx_power = 1
     vtx 0 6 0 0 1 900 1150
     vtx 1 6 0 0 2 1150 1475
@@ -32,38 +85,12 @@
     vtx 8 0 0 0 0 900 900
     vtx 9 0 0 0 0 900 900
     #$ OPTION END
-    #$ OPTION BEGIN (UNCHECKED): split around midrc: 25 / 100 / keep / 200 / 400 mW
-    set vtx_power = 1
-    vtx 0 6 0 0 1 900 1150
-    vtx 1 6 0 0 2 1150 1475
-    vtx 2 6 0 0 3 1525 1850
-    vtx 3 6 0 0 4 1850 2100
-    vtx 4 0 0 0 0 900 900
-    vtx 5 0 0 0 0 900 900
-    vtx 6 0 0 0 0 900 900
-    vtx 7 0 0 0 0 900 900
-    vtx 8 0 0 0 0 900 900
-    vtx 9 0 0 0 0 900 900
-    #$ OPTION END
-    #$ OPTION BEGIN (UNCHECKED): manual (25 mW) / 200 / 400 mW
+    #$ OPTION BEGIN (UNCHECKED): manual (25 mW) / 200 / MAX mW
     set vtx_power = 1
     vtx 0 6 0 0 0 900 1525
     vtx 1 6 0 0 3 1525 1800
     vtx 2 6 0 0 4 1800 2100
     vtx 3 0 0 0 0 900 900
-    vtx 4 0 0 0 0 900 900
-    vtx 5 0 0 0 0 900 900
-    vtx 6 0 0 0 0 900 900
-    vtx 7 0 0 0 0 900 900
-    vtx 8 0 0 0 0 900 900
-    vtx 9 0 0 0 0 900 900
-    #$ OPTION END
-    #$ OPTION BEGIN (UNCHECKED): manual (25 mW) / 100 / 200 / 400 mW
-    set vtx_power = 1
-    vtx 0 6 0 0 0 900 1525
-    vtx 1 6 0 0 2 1525 1700
-    vtx 2 6 0 0 3 1700 1900
-    vtx 3 6 0 0 4 1900 2100
     vtx 4 0 0 0 0 900 900
     vtx 5 0 0 0 0 900 900
     vtx 6 0 0 0 0 900 900

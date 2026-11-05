@@ -99,7 +99,7 @@ The **power index** is the VTX ladder the CLI prints as
 
 | index | 0 | 1 | 2 | 3 | 4 |
 |---|---|---|---|---|---|
-| level | PIT | 25 mW | 100 mW | 200 mW | 400 mW |
+| level | PIT | 25 mW | 100 mW | 200 mW | 400 mW (MAX) |
 
 A row with power `0` means "leave the power as it is" — the firmware only
 applies a row power when it is `> 0` — so **PIT cannot be selected by a row at
@@ -111,16 +111,28 @@ Range boundaries are microseconds, but the CLI floors them to 25 µs steps
 usable boundaries either side of midrc are **1475** and **1525** — 1499 lands on
 1475 and 1501 lands on 1500.
 
+The 3-tier options are the hummingbird layout — 25 mW, 100 mW, MAX — using the
+switch windows from the mode ranges in the same dump (900–1300, 1300–1675,
+1675–2100). The mid tier cannot simply be 1300–1675: that range contains 1500
+and would fire at every power-up.
+
 | Option | Forced rows | Notes |
 |---|---|---|
-| **split around midrc: 25 / 100 / 25 / 200 / 400 mW** *(default)* | 25 @ 900–1150, 100 @ 1150–1475, 200 @ 1525–1850, 400 @ 1850–2100 | the 1475–1525 row is unmapped, so that position holds the hand-set 25 mW |
-| split around midrc: 25 / 100 / keep / 200 / 400 mW | 25 @ 900–1150, 100 @ 1150–1475, 200 @ 1525–1850, 400 @ 1850–2100 | nothing covers 1475–1525, so that position keeps the last power |
-| manual (25 mW) / 200 / 400 mW | 200 @ 1525–1800, 400 @ 1800–2100 | one wide unmapped region, 900–1525 |
-| manual (25 mW) / 100 / 200 / 400 mW | 100 @ 1525–1700, 200 @ 1700–1900, 400 @ 1900–2100 | one wide unmapped region, 900–1525 |
+| **3 tiers: 25 / 100 / MAX** *(default)* | 25 @ 900–1150, 100 @ 1150–1475, MAX @ 1525–2100 | mid tier cut short at 1475, gap 1475–1525 |
+| 3 tiers: 25 / 100 / MAX (mid tier split around 1500) | 25 @ 900–1150, 100 @ 1150–1475, 100 @ 1525–1700, MAX @ 1700–2100 | mid tier either side of 1500, gap 1475–1525 |
+| 3 tiers: 25 / 100 / MAX (mid tier covers 1500) | 25 @ 900–1150, 100 @ 1150–1525, MAX @ 1525–2100 | **not boot safe** — 100 mW at every power-up |
+| 3 tiers: 25 / 100 / 200 mW | 25 @ 900–1150, 100 @ 1150–1475, 200 @ 1525–2100 | gentler top for a whoop frame |
+| 5 positions: 25 / 100 / 25 / 200 / MAX | 25 @ 900–1150, 100 @ 1150–1475, 200 @ 1525–1850, MAX @ 1850–2100 | 1475–1525 unmapped, holds the hand-set power |
+| manual (25 mW) / 200 / MAX mW | 200 @ 1525–1800, MAX @ 1800–2100 | one wide unmapped region, 900–1525 |
 | as captured *(not boot safe)* | 25 @ 900–1150, 100 @ 1150–1500, 200 @ 1500–2100, 100 @ 1750–2000, 200 @ 2000–2100 | the 1500–2100 row fires at every power-up |
 
-The first two options use the detent boundaries from the captured Whoozat
-config, so they should line up with the switch on that radio.
+**Which 3-tier option is right depends on where your radio sends the middle
+switch position.** If it reads below 1475, the first option gives it 100 mW. If
+it reads exactly 1500, it lands in that option's gap and keeps the last power —
+use the split option instead. If you would rather the middle position always
+takes 100 mW and don't mind the VTX coming up at 100 mW, use the option that
+covers 1500. Watch the AUX7 value in the Configurator's channel monitor to
+settle it.
 
 Two version differences worth knowing: 4.5 stops at the first matching row,
 while 2026.6 applies every matching row and lets the highest-indexed one win
