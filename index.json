@@ -348,7 +348,7 @@
     },
     {
       "fullPath": "presets/4.5/vtx/whoop_vtx_fablefpv.txt",
-      "hash": "91f654195ebbab9bcce304e835d7c9013388ea482f326e44cb9a091f1481f204",
+      "hash": "60396c6f3e4179c23e060592c39babbc689735d8dbdcec5d601584124ac4ccbb",
       "title": "Whoop VTX TX-power switch (AUX7) by fablefpv",
       "firmware_version": [
         "4.4",

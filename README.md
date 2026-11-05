@@ -78,49 +78,43 @@ version's `src/main/cli/settings.c`:
 `whoop_vtx_fablefpv.txt` is a **TX power switch on AUX7**, nothing more. Band
 and channel are left at `0`, which the firmware reads as "do not change the
 current band or channel", so this preset touches neither the band table, the
-power ladder, nor the selected band/channel/power — the VTX manufacturer
-settings are left exactly as configured.
+power ladder, nor the selected band/channel — the VTX manufacturer settings are
+left exactly as configured.
 
 **An active row always overrides a power you set by hand.** `processRxModes()`
 calls `vtxUpdateActivatedChannel()` on every RX frame, and any row whose AUX
 range is active writes its power into `vtx_power` — the config value, so it
 persists. Set 25 mW in the Configurator and it sticks in the UI, but the FC
-overwrites it as soon as a row matches, and a reconnect re-reads the FC's
-value. Park the switch in a detent no row covers if you want a hand-set power
-to stick.
+overwrites it as soon as a row matches.
+
+**And at power-up every channel reads `midrc` (1500)** until the radio links,
+so the rows are evaluated straight away against 1500. Any *forced* row whose
+range contains 1500 therefore forces its power at **every power-up**, and that
+is the value that gets saved — a hand-set power can never survive a reboot.
+This is why the lower detent is left unmapped (power level 0 = "leave the power
+as it is") and why its range runs one 25 µs step past midrc, to 1525.
 
 Power is a level index into the factory ladder (0 = 25 mW, 1 = 100, 2 = 200,
 3 = 400, 4 = PIT). The firmware only applies a row's power when it is **greater
-than zero**, so level 0 — the 25 mW level — can never be selected by a row; it
-means "leave the power as it is". The options therefore use levels 1–4, and the
-5-position option deliberately leaves the lowest detent unmapped so a hand-set
-25 mW survives there.
+than zero**, so level 0 — the 25 mW level — can never be selected by a row.
 
 | Option | Ranges | Power |
 |---|---|---|
-| **2 positions** *(default)* | 900–1500 / 1500–2100 | 25 mW manual / 400 mW |
-| 3 positions | 900–1150 / 1150–1500 / 1500–2100 | 100 / 200 / 400 mW |
-| 5 positions | 900–1150 / 1150–1500 / 1500–1750 / 1750–2000 / 2000–2100 | 25 mW manual / 100 / 200 / 400 / PIT |
+| **manual / 200 / 400 mW** *(default)* | 900–1525 / 1525–1800 / 1800–2100 | 25 mW manual / 200 / 400 |
+| manual / 100 / 200 / 400 mW | 900–1525 / 1525–1700 / 1700–1900 / 1900–2100 | 25 mW manual / 100 / 200 / 400 |
+| manual / 100 / 200 / 400 / PIT | 900–1525 / 1525–1700 / 1700–1900 / 1900–2050 / 2050–2100 | 25 mW manual / 100 / 200 / 400 / PIT |
+| as captured *(not boot safe)* | 900–1150 / 1150–1500 / 1500–2100 / 1750–2000 / 2000–2100 | 100 / 200 / 400 / 200 / 400 |
 
-The lower detent of the 2-position and 5-position options is left unmapped, so a
-power set by hand survives there; both of those options also set `vtx_power = 0`
-so the hand-set value starts at 25 mW. With AUX7 in the lower position the VTX
-stays at 25 mW until you change it; with AUX7 anywhere else it takes that
-position's value.
+With AUX7 in the lower position the VTX stays at the power you set by hand —
+the option sets `vtx_power = 0`, which is 25 mW — and above the boundary the
+switch steps the power. Move the 1525 boundary if your radio sends different
+AUX7 values.
 
-One catch: "leave as set" means *leave whatever was last set*. Visit a higher
-detent and the lower one keeps that value — re-pick 25 mW in the Video
-Transmitter tab to go back.
-
-The 3-position option reproduces the captured configuration, in which every
-detent forces a level. The captured dump also had two further rows that were
-unreachable —
-row 2 covered 1500–2100 and shadowed them — so the default option clears them
-rather than preserving a dead pair.
-
-Firmware note: 4.5 stops at the first matching row, while 2026.6 applies every
-matching row and lets the highest-indexed one win per field. The rows here are
-disjoint, so it makes no difference — but a hand-set power loses either way.
+Two version differences worth knowing: 4.5 stops at the first matching row,
+while 2026.6 applies every matching row and lets the highest-indexed one win
+per field. And "leave as set" means *leave whatever was last set*: visit a
+higher detent and the lower one keeps that value until you re-pick it in the
+Video Transmitter tab.
 
 **Rates, modes and adjustments need no splitting** — every parameter, line format
 and value was verified against 4.4, 4.5, 2025.12 and 2026.6, so one file each
