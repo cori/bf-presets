@@ -28,7 +28,7 @@ you filter on in the UI.
 |---|---|---|---|
 | `presets/4.5/rates/whoop_rates_fablefpv.txt` | RATES | 4.4, 4.5, 2025.12, 2026.6 | all four whoop rate profiles |
 | `presets/4.5/modes/whoop_modes_fablefpv.txt` | MODES | 4.4, 4.5, 2025.12, 2026.6 | 20 mode slots + 30 adjustment slots |
-| `presets/4.5/vtx/whoop_vtx_fablefpv.txt` | VTX | 4.4, 4.5, 2025.12, 2026.6 | VTX band table + AUX-switch control |
+| `presets/4.5/vtx/whoop_vtx_fablefpv.txt` | VTX | 4.4, 4.5, 2025.12, 2026.6 | TX power switch on AUX7 (2/3/5-position options) |
 | `presets/4.5/osd/whoop_osd_fablefpv.txt` | OSD | 4.4, 4.5 | 115 OSD params |
 | `presets/2026.6/osd/whoop_osd_fablefpv.txt` | OSD | 2025.12, 2026.6 | 114 OSD params |
 | `presets/4.5/osd/whoop_osd_dvr_fablefpv.txt` | OSD | 4.4, 4.5 | 114 OSD params — flying layout **+ DVR/debug profile 2** |
@@ -73,14 +73,29 @@ version's `src/main/cli/settings.c`:
   the way to get one if you want it in flight.) This preset also omits
   `osd_log_status_pos`, which does not exist on a build without blackbox.
 
-### VTX with AUX control
+### VTX TX-power switch (AUX7)
 
-`whoop_vtx_fablefpv.txt` carries the VTX band table and the AUX-controlled
-`vtx` rows captured from Whoozat: AUX1 low / middle / high select band 6
-(LOWRACE) channels 1 / 2 / 3, AUX2 at 1750–2000 selects channel 2 and AUX3 at
-2000–2100 selects channel 3. It also sets the currently selected VTX (band 4
-FATSHARK, channel 8, power level 1) exactly as captured, so applying it will
-switch the VTX to that band before the AUX switch is used.
+`whoop_vtx_fablefpv.txt` is a **TX power switch on AUX7**, nothing more. The
+firmware walks the `vtx` rows in order and the **first matching range wins**,
+so the rows must partition the switch travel without overlapping. Band and
+channel are left at `0`, which the firmware reads as "do not change the current
+band or channel", so this preset touches neither the band table, the power
+ladder, nor the selected band/channel/power — the VTX manufacturer settings are
+left exactly as configured.
+
+Power is a level index into the factory ladder (0 = 25 mW, 1 = 100, 2 = 200,
+3 = 400, 4 = PIT). The preset offers three mutually exclusive layouts:
+
+| Option | Ranges | Power |
+|---|---|---|
+| 2 positions | 900–1500 / 1500–2100 | 25 / 400 mW |
+| **3 positions** *(default)* | 900–1150 / 1150–1500 / 1500–2100 | 100 / 200 / 400 mW |
+| 5 positions | 900–1150 / 1150–1500 / 1500–1750 / 1750–2000 / 2000–2100 | 25 / 100 / 200 / 400 / PIT |
+
+The 3-position option is the default because it reproduces the captured
+configuration. Note that the original dump's rows 3 and 4 were unreachable —
+row 2 covered 1500–2100 and shadowed them — so the default option clears them
+rather than preserving a dead pair.
 
 **Rates, modes and adjustments need no splitting** — every parameter, line format
 and value was verified against 4.4, 4.5, 2025.12 and 2026.6, so one file each
