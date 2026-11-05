@@ -15,11 +15,39 @@
 #$ DESCRIPTION: The power is an index into that quad's own VTX table, which for the BETAFPV G473 family is "vtxtable powervalues 1 2 3 4 0" with labels 25 / 100 / 200 / 400 / PIT - so 1 = 25 mW, 2 = 100 mW, 3 = 200 mW, 4 = 400 mW (MAX), and 0 = PIT. The index is NOT universal: the CLI checks it against the table and rejects a power above the table's level count with "invalid argument count", clearing the row. VTXes with a three level ladder (Hummingbird, HummingRoach, AcroB, BardoII, TINYHAWK_II, NANOHAWK) are a different preset - see whoop_vtx_3level_fablefpv.txt. A row with power 0 means "leave the power as it is", because the firmware only applies a row power when it is greater than zero - so PIT cannot be selected by a row at all. It can only be set by hand in the Video Transmitter tab.
 #$ DESCRIPTION: Band and channel are left at 0, which the firmware reads as "do not change the current band or channel", so this preset touches neither the band table, the power ladder, nor the selected band/channel - the VTX manufacturer settings are left exactly as configured.
 #$ DESCRIPTION: Which 3-tier option is right depends on where your radio sends the middle switch position. If it reads below 1475 the first option gives it 100 mW; if it reads exactly 1500 it falls in the first option gap and keeps the last power, so use the split option; if you would rather the middle position always takes 100 mW and do not mind the VTX coming up at 100 mW, use the option that covers 1500.
-#$ DESCRIPTION: The last option reproduces the captured configuration exactly (25 / 100 / 200 / 100 / 200 mW). It is not boot safe: at power-up the 1500 default lands in its 1500-2100 row and forces 200 mW.
+#$ DESCRIPTION: The 5-tier options use the switch windows from the Air75 III dump of 2026-10-11 - the only G473 with a five position ladder. Its top two positions are both 400 mW because PIT is device value 0, the firmware's "leave the power as set" sentinel, so no row can force it.
+
+The last option reproduces the captured configuration exactly (25 / 100 / 200 / 100 / 200 mW). It is not boot safe: at power-up the 1500 default lands in its 1500-2100 row and forces 200 mW.
 #$ DISCLAIMER: The information provided in these presets is for educational and entertainment purposes only. Betaflight makes no representations as to the safety or legality of the use of any information provided herein. End users assume all responsibility and liability for ensuring they comply with all relevant laws and regulations. Using these VTX tables may be in breach of your local RF laws. You as the end user must research and comply with your local regulations. In using these presets, the user assumes any and all liability associated with breaching local regulations.
 #$ WARNING: Applying a preset permanently changes your configuration. Back up first with the CLI ("dump all") and know how to restore it.
 
     #$ OPTION_GROUP BEGIN: (EXCLUSIVE) TX power levels on the AUX7 switch
+    #$ OPTION BEGIN (UNCHECKED): 5 tiers: 25 / 100 / 200 / 400 / 400 (Air75 III)
+        set vtx_power = 1
+        vtx 0 6 0 0 1 900 1100
+        vtx 1 6 0 0 2 1100 1350
+        vtx 2 6 0 0 3 1350 1600
+        vtx 3 6 0 0 4 1600 1800
+        vtx 4 6 0 0 4 1800 2100
+        vtx 5 0 0 0 0 900 900
+        vtx 6 0 0 0 0 900 900
+        vtx 7 0 0 0 0 900 900
+        vtx 8 0 0 0 0 900 900
+        vtx 9 0 0 0 0 900 900
+    #$ OPTION END
+    #$ OPTION BEGIN (UNCHECKED): 5 tiers: 25 / 100 / 200 / 400 / 400 (Air75 III, mid tier split around 1500)
+        set vtx_power = 1
+        vtx 0 6 0 0 1 900 1100
+        vtx 1 6 0 0 2 1100 1350
+        vtx 2 6 0 0 3 1350 1475
+        vtx 3 6 0 0 3 1525 1600
+        vtx 4 6 0 0 4 1600 1800
+        vtx 5 6 0 0 4 1800 2100
+        vtx 6 0 0 0 0 900 900
+        vtx 7 0 0 0 0 900 900
+        vtx 8 0 0 0 0 900 900
+        vtx 9 0 0 0 0 900 900
+    #$ OPTION END
     #$ OPTION BEGIN (CHECKED): 3 tiers: 25 / 100 / MAX (lowest tier covers midrc)
         set vtx_power = 1
         vtx 0 6 0 0 1 900 1525

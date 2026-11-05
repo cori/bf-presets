@@ -171,6 +171,8 @@ and would fire at every power-up.
 | Option | Forced rows | Notes |
 |---|---|---|
 | **3 tiers: 25 / 100 / MAX (lowest tier covers midrc)** *(default)* | 25 @ 900–1525, 100 @ 1525–1750, MAX @ 1750–2100 | the boot lands on the **lowest** tier, so the hand-set power is replaced by 25 mW rather than by 200/400 |
+| **5 tiers: 25 / 100 / 200 / 400 / 400 (Air75 III)** | 25 @ 900–1100, 100 @ 1100–1350, 200 @ 1350–1600, 400 @ 1600–1800, 400 @ 1800–2100 | the five-position ladder captured from the Air75 III; the 200 mW row covers midrc, so the boot forces 200 mW |
+| 5 tiers: 25 / 100 / 200 / 400 / 400 (Air75 III, mid tier split around 1500) | as above with the 200 mW tier split into 1350–1475 and 1525–1600 | boot safe |
 | 3 tiers: 25 / 100 / MAX | 25 @ 900–1150, 100 @ 1150–1475, MAX @ 1525–2100 | mid tier cut short at 1475, gap 1475–1525 |
 | 3 tiers: 25 / 100 / MAX (mid tier split around 1500) | 25 @ 900–1150, 100 @ 1150–1475, 100 @ 1525–1700, MAX @ 1700–2100 | mid tier either side of 1500, gap 1475–1525 |
 | 3 tiers: 25 / 100 / MAX (mid tier covers 1500) | 25 @ 900–1150, 100 @ 1150–1525, MAX @ 1525–2100 | **not boot safe** — 100 mW at every power-up |
