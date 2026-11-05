@@ -94,24 +94,33 @@ is the value that gets saved — a hand-set power can never survive a reboot.
 The constraint is only about the row that *contains* 1500: levels may well be
 forced on either side of it, so the ladder can be split around midrc.
 
-| Option | Forced rows (power @ range) | Notes |
+The **power index** is the VTX ladder the CLI prints as
+`vtxtable powerlabels 25 100 200 400 PIT`:
+
+| index | 0 | 1 | 2 | 3 | 4 |
+|---|---|---|---|---|---|
+| level | PIT | 25 mW | 100 mW | 200 mW | 400 mW |
+
+A row with power `0` means "leave the power as it is" — the firmware only
+applies a row power when it is `> 0` — so **PIT cannot be selected by a row at
+all**; set it by hand in the Video Transmitter tab. Note the trap: `set vtx_power = 0`
+is therefore *PIT mode*, not 25 mW. 25 mW is index 1.
+
+Range boundaries are microseconds, but the CLI floors them to 25 µs steps
+(`CHANNEL_VALUE_TO_STEP`) and the end of a range is exclusive, so the closest
+usable boundaries either side of midrc are **1475** and **1525** — 1499 lands on
+1475 and 1501 lands on 1500.
+
+| Option | Forced rows | Notes |
 |---|---|---|
-| **split around midrc: 100 / 200 / 25 / 400 / PIT** *(default)* | 100 @ 900–1150, 200 @ 1150–1500, 400 @ 1750–2000, PIT @ 2000–2100 | the 1500–1750 row is unmapped, so the mid position holds the hand-set 25 mW |
-| split around midrc: 100 / 200 / 400 / PIT (gap at 1500) | 100 @ 900–1150, 200 @ 1150–1475, 400 @ 1525–2000, PIT @ 2000–2100 | nothing covers 1475–1525, so the mid position keeps the last power |
+| **split around midrc: 25 / 100 / 25 / 200 / 400 mW** *(default)* | 25 @ 900–1150, 100 @ 1150–1475, 200 @ 1525–1850, 400 @ 1850–2100 | the 1475–1525 row is unmapped, so that position holds the hand-set 25 mW |
+| split around midrc: 25 / 100 / keep / 200 / 400 mW | 25 @ 900–1150, 100 @ 1150–1475, 200 @ 1525–1850, 400 @ 1850–2100 | nothing covers 1475–1525, so that position keeps the last power |
 | manual (25 mW) / 200 / 400 mW | 200 @ 1525–1800, 400 @ 1800–2100 | one wide unmapped region, 900–1525 |
 | manual (25 mW) / 100 / 200 / 400 mW | 100 @ 1525–1700, 200 @ 1700–1900, 400 @ 1900–2100 | one wide unmapped region, 900–1525 |
-| manual (25 mW) / 100 / 200 / 400 / PIT | 100 @ 1525–1700, 200 @ 1700–1900, 400 @ 1900–2050, PIT @ 2050–2100 | one wide unmapped region, 900–1525 |
-| as captured *(not boot safe)* | 100 @ 900–1150, 200 @ 1150–1500, 400 @ 1500–2100, 200 @ 1750–2000, 400 @ 2000–2100 | the 1500–2100 row fires at every power-up |
-
-Power is a level index into the factory ladder (0 = 25 mW, 1 = 100, 2 = 200,
-3 = 400, 4 = PIT). The firmware only applies a row's power when it is **greater
-than zero**, so level 0 — the 25 mW level — can never be selected by a row; it
-means "leave the power as it is".
+| as captured *(not boot safe)* | 25 @ 900–1150, 100 @ 1150–1500, 200 @ 1500–2100, 100 @ 1750–2000, 200 @ 2000–2100 | the 1500–2100 row fires at every power-up |
 
 The first two options use the detent boundaries from the captured Whoozat
-config, so they should line up with the switch on that radio. The "manual"
-options leave the whole lower half of the switch travel holding one hand-set
-power, which means every detent below 1525 reads the same value.
+config, so they should line up with the switch on that radio.
 
 Two version differences worth knowing: 4.5 stops at the first matching row,
 while 2026.6 applies every matching row and lets the highest-indexed one win
