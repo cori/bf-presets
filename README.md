@@ -76,124 +76,71 @@ version's `src/main/cli/settings.c`:
 
 ### VTX TX-power switch (AUX7)
 
-`whoop_vtx_g473_fablefpv.txt` is a **TX power switch on AUX7**, nothing more. Band
-and channel are left at `0`, which the firmware reads as "do not change the
-current band or channel", so this preset touches neither the band table, the
-power ladder, nor the selected band/channel — the VTX manufacturer settings are
-left exactly as configured.
+Two VTX presets, split by **VTX table family** — not by quad size. Each has a
+**clear** option plus one best-effort layout per tier count.
 
-**An active row always overrides a power you set by hand.** `processRxModes()`
-calls `vtxUpdateActivatedChannel()` on every RX frame, and any row whose AUX
-range is active writes its power into `vtx_power` — the config value, so it
-persists. Set 25 mW in the Configurator and it sticks in the UI, but the FC
-overwrites it as soon as a row matches.
+| Preset | For | Options |
+|---|---|---|
+| `whoop_vtx_g473_fablefpv.txt` | BETAFPV G473 — Air65, Whoozat, Vi, Air75 III | clear · 3 tiers · 5 tiers |
+| `whoop_vtx_3level_fablefpv.txt` | three-level VTXs — Hummingbird, HummingRoach, AcroB, BardoII, TINYHAWK_II, NANOHAWK | clear · 3 tiers |
 
-**And at power-up every channel reads `midrc` (1500)** until the radio links,
-so the rows are evaluated straight away against 1500. Any *forced* row whose
-range contains 1500 therefore forces its power at **every power-up**, and that
-is the value that gets saved — a hand-set power can never survive a reboot.
-The constraint is only about the row that *contains* 1500: levels may well be
-forced on either side of it, so the ladder can be split around midrc.
+**`clear` writes the idle form of a row** — `vtx N 0 0 0 0 900 900` — which is
+what the firmware stores for an unused slot. A zero-width range never matches
+and a power of 0 means "leave the power as it is", so the cleared rows cannot
+touch the TX power. It leaves `vtx_band`, `vtx_channel` and `vtx_power` alone,
+so the power you have set stays whatever it is.
 
-**Or let midrc land on your lowest tier.** If the tier you want at power-up is
-the lowest one, give that tier the range that contains 1500: the boot then
-forces the lowest tier, which is the safe end of the ladder, and a hand-set
-power is replaced by 25 mW instead of by 200/400 mW. On a ladder whose lowest
-level is device value 0 the same trick is not available — 0 is the "leave the
-power as set" sentinel — so the lowest tier is an *unmapped* row that holds the
-parked power, with midrc inside it. That is what the three-level preset's
-default option does.
+The **power** in a row is the **VTX device's own power value** — not a universal
+level. Each quad publishes its mapping in its own `vtxtable`: `powervalues` is
+the device value for each entry, `powerlabels` the label for it. The CLI checks
+the row's power against the table's **entry count**, so a power above the count
+is rejected with `invalid argument count` and the row is cleared, while a power
+one past the end is accepted and then does nothing on the device. Read your
+quad's table with `vtxtable powerlevels` / `powervalues` / `powerlabels`.
 
-The **power** in a row is the **VTX device's own power value** — it is **not** a
-universal power level. Each quad's `vtxtable` lists the mapping: `powervalues`
-holds the device value for each entry and `powerlabels` the label for it. The
-CLI checks the row's power against the table's **entry count**, so:
-
-- a power above the count is rejected with `invalid argument count` and the
-  whole row is cleared;
-- a power **one past the end** is accepted by the CLI but the device has no such
-  level, so the row silently does nothing — which is exactly what the
-  HummingRoach's captured configuration had on its top row (`power 3` on a
-  three-level table).
-
-Read your quad's table with:
-
-```
-vtxtable powerlevels
-vtxtable powervalues
-vtxtable powerlabels
-```
-
-| VTX family | `powervalues` (device values) | labels | usable in a row |
+| VTX family | `powervalues` | labels | usable in a row |
 |---|---|---|---|
-| BETAFPV G473 — Air65, Whoozat, Vi | `1 2 3 4 0` | 25 / 100 / 200 / 400 / PIT | 1, 2, 3, 4 |
+| BETAFPV G473 — Air65, Whoozat, Vi, Air75 III | `1 2 3 4 0` | 25 / 100 / 200 / 400 / PIT | 1, 2, 3, 4 |
 | Hummingbird, HummingRoach, AcroB, BardoII | `0 1 2` | 25 / 100 / MAX | 1, 2 |
 | TINYHAWK_II, NANOHAWK | `0 1 2` | 25 / 100 / 200 | 1, 2 |
 | NANOHAWK_II | `0` | 25 | — (only the parked value) |
 | MOBULA, PROFER | `1 2 14 20 26` | 0 / RCE / 25 / 100 / 400 | 14, 20, 26 |
 
-So there are two VTX presets, and **pick the one that matches your quad's
-table**:
-
-- **`whoop_vtx_g473_fablefpv.txt`** — BETAFPV G473 (25 / 100 / 200 / 400 / PIT).
-  On that ladder index 1 = 25 mW, 2 = 100, 3 = 200, 4 = 400 (MAX), 0 = PIT.
-- **`whoop_vtx_3level_fablefpv.txt`** — three-level ladders (25 / 100 / MAX).
-  Here index **0 = 25 mW**, which is also the firmware's "leave as set"
-  sentinel, so 25 mW can never be forced by a row — it is the parked value
-  (`set vtx_power = 0`), and only indices 1 and 2 can force a level. Its switch
-  windows come from the HummingRoach (900–1350 / 1350–1700 / 1700–2100).
-
-The HummingRoach's own captured configuration was written **one index too
-high**: it used powers 1, 2 and 3 on a ladder where 0 is 25 mW, 1 is 100 mW and
-2 is MAX. That meant it ran a step hot (100 mW where 25 mW was intended) and
-its top row pointed at an index the device does not have. The three-level preset
-fixes that.
-
 Applying the G473 preset to a three-level quad fails on the 400 mW row with
 `invalid argument count`; applying the three-level preset to a G473 quietly
 means 25 mW = 100 mW and MAX = 200 mW. Check the table before you apply.
 
-A row with power `0` means "leave the power as it is" — the firmware only
-applies a row power when it is `> 0` — so **PIT cannot be selected by a row at
-all**; set it by hand in the Video Transmitter tab. Note the trap: `set vtx_power = 0`
-is therefore *PIT mode*, not 25 mW. 25 mW is index 1.
+### The boot-time midrc trap
+
+**An active row always overrides a power you set by hand.**
+`processRxModes()` calls `vtxUpdateActivatedChannel()` on every RX frame, and
+any row whose AUX range is active writes its power into `vtx_power` — the config
+value, so it persists. Set 25 mW in the Configurator and it sticks in the UI,
+but the FC overwrites it as soon as a row matches.
+
+**And at power-up every channel reads `midrc` (1500)** until the radio links,
+so the rows are evaluated straight away against 1500. Any *forced* row whose
+range contains 1500 therefore forces its power at **every power-up**, and that
+is the value that gets saved — a hand-set power can never survive a reboot.
+
+Two ways out, both used in the presets:
+
+- **Let midrc land on your lowest tier.** Give the lowest tier the range that
+  contains 1500: the boot then forces the lowest tier, the safe end of the
+  ladder, and a hand-set power is replaced by 25 mW instead of by 200/400 mW.
+  This is what the 3-tier options do.
+- **Leave a gap at midrc**, or split the tier that covers it into two rows
+  either side of 1500. The 5-tier option splits the 200 mW tier into
+  1350–1475 and 1525–1600.
 
 Range boundaries are microseconds, but the CLI floors them to 25 µs steps
 (`CHANNEL_VALUE_TO_STEP`) and the end of a range is exclusive, so the closest
-usable boundaries either side of midrc are **1475** and **1525** — 1499 lands on
-1475 and 1501 lands on 1500.
+usable boundaries either side of midrc are **1475** and **1525**.
 
-The 3-tier options are the hummingbird layout — 25 mW, 100 mW, MAX — using the
-switch windows from the mode ranges in the same dump (900–1300, 1300–1675,
-1675–2100). The mid tier cannot simply be 1300–1675: that range contains 1500
-and would fire at every power-up.
-
-| Option | Forced rows | Notes |
-|---|---|---|
-| **3 tiers: 25 / 100 / MAX (lowest tier covers midrc)** *(default)* | 25 @ 900–1525, 100 @ 1525–1750, MAX @ 1750–2100 | the boot lands on the **lowest** tier, so the hand-set power is replaced by 25 mW rather than by 200/400 |
-| **5 tiers: 25 / 100 / 200 / 400 / 400 (Air75 III)** | 25 @ 900–1100, 100 @ 1100–1350, 200 @ 1350–1600, 400 @ 1600–1800, 400 @ 1800–2100 | the five-position ladder captured from the Air75 III; the 200 mW row covers midrc, so the boot forces 200 mW |
-| 5 tiers: 25 / 100 / 200 / 400 / 400 (Air75 III, mid tier split around 1500) | as above with the 200 mW tier split into 1350–1475 and 1525–1600 | boot safe |
-| 3 tiers: 25 / 100 / MAX | 25 @ 900–1150, 100 @ 1150–1475, MAX @ 1525–2100 | mid tier cut short at 1475, gap 1475–1525 |
-| 3 tiers: 25 / 100 / MAX (mid tier split around 1500) | 25 @ 900–1150, 100 @ 1150–1475, 100 @ 1525–1700, MAX @ 1700–2100 | mid tier either side of 1500, gap 1475–1525 |
-| 3 tiers: 25 / 100 / MAX (mid tier covers 1500) | 25 @ 900–1150, 100 @ 1150–1525, MAX @ 1525–2100 | **not boot safe** — 100 mW at every power-up |
-| 3 tiers: 25 / 100 / 200 mW | 25 @ 900–1150, 100 @ 1150–1475, 200 @ 1525–2100 | gentler top for a whoop frame |
-| 5 positions: 25 / 100 / 25 / 200 / MAX | 25 @ 900–1150, 100 @ 1150–1475, 200 @ 1525–1850, MAX @ 1850–2100 | 1475–1525 unmapped, holds the hand-set power |
-| manual (25 mW) / 200 / MAX mW | 200 @ 1525–1800, MAX @ 1800–2100 | one wide unmapped region, 900–1525 |
-| as captured *(not boot safe)* | 25 @ 900–1150, 100 @ 1150–1500, 200 @ 1500–2100, 100 @ 1750–2000, 200 @ 2000–2100 | the 1500–2100 row fires at every power-up |
-
-**Which 3-tier option is right depends on where your radio sends the middle
-switch position.** If it reads below 1475, the first option gives it 100 mW. If
-it reads exactly 1500, it lands in that option's gap and keeps the last power —
-use the split option instead. If you would rather the middle position always
-takes 100 mW and don't mind the VTX coming up at 100 mW, use the option that
-covers 1500. Watch the AUX7 value in the Configurator's channel monitor to
-settle it.
-
-Two version differences worth knowing: 4.5 stops at the first matching row,
-while 2026.6 applies every matching row and lets the highest-indexed one win
-per field. And "leave as set" means *leave whatever was last set*: visit a
-higher detent and the lower one keeps that value until you re-pick it in the
-Video Transmitter tab.
+Note that the switch windows are best-effort — they came from one quad's
+captured config, not from a measurement of your radio. On a pot or a switch,
+read the actual channel values in the Configurator's channel monitor and adjust
+the boundaries to your detents.
 
 **Rates, modes and adjustments need no splitting** — every parameter, line format
 and value was verified against 4.4, 4.5, 2025.12 and 2026.6, so one file each

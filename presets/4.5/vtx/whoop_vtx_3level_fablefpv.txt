@@ -1,23 +1,35 @@
-#$ TITLE: Whoop VTX TX-power switch (AUX7), 3-level VTX, by fablefpv
+#$ TITLE: Whoop VTX TX-power switch (AUX7), three-level VTX, by fablefpv
 #$ FIRMWARE_VERSION: 4.4
 #$ FIRMWARE_VERSION: 4.5
 #$ FIRMWARE_VERSION: 2025.12
 #$ FIRMWARE_VERSION: 2026.6
 #$ CATEGORY: VTX
 #$ STATUS: COMMUNITY
-#$ KEYWORDS: whoop, hummingbird, hummingroach, vtx, aux, aux7, power, 3-level, 25, 100, max, fablefpv
+#$ KEYWORDS: whoop, hummingbird, hummingroach, acrobee, bardo, vtx, aux, aux7, power, 3-level, 25, 100, max, fablefpv
 #$ AUTHOR: fablefpv
-#$ DESCRIPTION: VTX TX power control on the AUX7 switch for a VTX with a THREE level power ladder - the Hummingbird, HummingRoach, AcroB, BardoII, TINYHAWK_II and NANOHAWK family. The switch windows come from the HummingRoach dump of 2026-11-02.
-#$ DESCRIPTION: IMPORTANT - the power in a vtx row is an index into that quad's own VTX table, not a universal power level. The CLI checks it against the table: a row power above the table's level count is rejected with "invalid argument count" and the row is cleared. This preset is for the table "vtxtable powervalues 0 1 2" with labels 25 / 100 / MAX - so index 0 is 25 mW, index 1 is 100 mW and index 2 is MAX (200 mW on the quads that label it that way). For the BETAFPV G473 family the same table is "1 2 3 4 0" = 25 / 100 / 200 / 400 / PIT, which is a different preset.
-#$ DESCRIPTION: Because a row power of 0 is the firmware's "leave the power as it is" sentinel, 25 mW - which is index 0 on this family - can never be forced by a row. It is the parked value instead: the options set vtx_power = 0, which is 25 mW on this ladder.
-#$ DESCRIPTION: At power-up every channel reads midrc (1500) until the radio links, and the rows are evaluated straight away, so any forced row whose range contains 1500 forces its power at every power-up and that value is what gets saved. The options are therefore split around 1500 - levels are forced on either side of it and only the row that contains 1500 is left unmapped. The range boundaries are microseconds but the CLI floors them to 25 us steps and the end of a range is exclusive, so the closest usable boundaries either side of midrc are 1475 and 1525.
-#$ DESCRIPTION: Band and channel are left at 0, which the firmware reads as "do not change the current band or channel", so this preset touches neither the band table, the power ladder, nor the selected band/channel - the VTX manufacturer settings are left exactly as configured.
-#$ DESCRIPTION: The last option reproduces the captured HummingRoach configuration exactly. It is not boot safe - the 1500 default lands in its 1350-1700 row and forces 100 mW - and its third row uses power 3, which does not exist on a three level table, so the CLI accepts it but the device has no such level.
+#$ DESCRIPTION: This family publishes its ladder as "vtxtable powervalues 0 1 2" with labels 25 / 100 / MAX, so index 0 = 25 mW, 1 = 100 mW and 2 = MAX. Because index 0 is also the firmware's "leave the power as it is" sentinel, 25 mW cannot be forced by a row - it is the parked value, set with "set vtx_power = 0", and only indices 1 and 2 can force a level. For the BETAFPV G473 family the ladder is a different preset - see whoop_vtx_g473_fablefpv.txt.
+#$ DESCRIPTION: Each vtx row sets the TX power for a range of AUX7. The firmware evaluates the rows on every RX frame and writes the matching row power into vtx_power, so an active row always overrides a power set by hand in the Configurator.
+#$ DESCRIPTION: The power is an index into the quad's own VTX table, not a universal level, so a preset is valid only for the table family it was written against. The CLI rejects a power above the table's level count with "invalid argument count" and clears that row, so a mismatched preset loses one tier.
+#$ DESCRIPTION: The clear option writes the idle form of a row - vtx N 0 0 0 0 900 900 - which is what the firmware stores for an unused slot. A zero-width range never matches and a power of 0 means "leave the power as it is", so the cleared rows cannot touch the TX power. It leaves vtx_band, vtx_channel and vtx_power alone.
+#$ DESCRIPTION: At power-up every channel reads midrc (1500) until the radio links, and the rows are evaluated straight away, so any forced row whose range contains 1500 forces its power at every power-up and that value is what gets saved. The range boundaries are in microseconds but the CLI floors them to 25 us steps, and the end of a range is exclusive, so the closest usable boundaries either side of midrc are 1475 and 1525.
+#$ DESCRIPTION: Band and channel are left at 0, which the firmware reads as "do not change the current band or channel", so these presets touch neither the band table, the power ladder, nor the selected band/channel - the VTX manufacturer settings are left exactly as configured.
 #$ DISCLAIMER: The information provided in these presets is for educational and entertainment purposes only. Betaflight makes no representations as to the safety or legality of the use of any information provided herein. End users assume all responsibility and liability for ensuring they comply with all relevant laws and regulations. Using these VTX tables may be in breach of your local RF laws. You as the end user must research and comply with your local regulations. In using these presets, the user assumes any and all liability associated with breaching local regulations.
 #$ WARNING: Applying a preset permanently changes your configuration. Back up first with the CLI ("dump all") and know how to restore it.
 
-    #$ OPTION_GROUP BEGIN: (EXCLUSIVE) TX power levels on the AUX7 switch
-    #$ OPTION BEGIN (CHECKED): 3 tiers: 25 / 100 / MAX (lowest tier covers midrc)
+    #$ OPTION_GROUP BEGIN: (EXCLUSIVE) TX power on the AUX7 switch
+    #$ OPTION BEGIN (CHECKED): clear - no VTX switch, leave the TX power alone
+        vtx 0 0 0 0 0 900 900
+        vtx 1 0 0 0 0 900 900
+        vtx 2 0 0 0 0 900 900
+        vtx 3 0 0 0 0 900 900
+        vtx 4 0 0 0 0 900 900
+        vtx 5 0 0 0 0 900 900
+        vtx 6 0 0 0 0 900 900
+        vtx 7 0 0 0 0 900 900
+        vtx 8 0 0 0 0 900 900
+        vtx 9 0 0 0 0 900 900
+    #$ OPTION END
+    #$ OPTION BEGIN (UNCHECKED): 3 tiers: 25 / 100 / MAX
         set vtx_power = 0
         vtx 0 6 0 0 0 900 1525
         vtx 1 6 0 0 1 1525 1750
@@ -29,56 +41,5 @@
         vtx 7 0 0 0 0 900 900
         vtx 8 0 0 0 0 900 900
         vtx 9 0 0 0 0 900 900
-    #$ OPTION END
-    #$ OPTION BEGIN (UNCHECKED): 3 tiers: 25 / 100 / MAX
-    set vtx_power = 0
-    vtx 0 6 0 0 0 900 1350
-    vtx 1 6 0 0 1 1350 1475
-    vtx 2 6 0 0 2 1525 2100
-    vtx 3 0 0 0 0 900 900
-    vtx 4 0 0 0 0 900 900
-    vtx 5 0 0 0 0 900 900
-    vtx 6 0 0 0 0 900 900
-    vtx 7 0 0 0 0 900 900
-    vtx 8 0 0 0 0 900 900
-    vtx 9 0 0 0 0 900 900
-    #$ OPTION END
-    #$ OPTION BEGIN (UNCHECKED): 3 tiers: 25 / 100 / MAX (mid tier split around 1500)
-    set vtx_power = 0
-    vtx 0 6 0 0 0 900 1350
-    vtx 1 6 0 0 1 1350 1475
-    vtx 2 6 0 0 1 1525 1700
-    vtx 3 6 0 0 2 1700 2100
-    vtx 4 0 0 0 0 900 900
-    vtx 5 0 0 0 0 900 900
-    vtx 6 0 0 0 0 900 900
-    vtx 7 0 0 0 0 900 900
-    vtx 8 0 0 0 0 900 900
-    vtx 9 0 0 0 0 900 900
-    #$ OPTION END
-    #$ OPTION BEGIN (UNCHECKED): 3 tiers: 25 / 100 / MAX (mid tier covers 1500)
-    set vtx_power = 0
-    vtx 0 6 0 0 0 900 1350
-    vtx 1 6 0 0 1 1350 1525
-    vtx 2 6 0 0 2 1525 2100
-    vtx 3 0 0 0 0 900 900
-    vtx 4 0 0 0 0 900 900
-    vtx 5 0 0 0 0 900 900
-    vtx 6 0 0 0 0 900 900
-    vtx 7 0 0 0 0 900 900
-    vtx 8 0 0 0 0 900 900
-    vtx 9 0 0 0 0 900 900
-    #$ OPTION END
-    #$ OPTION BEGIN (UNCHECKED): as captured - NOT boot safe, 1500 forces 100 mW
-    vtx 0 6 0 0 1 900 1350
-    vtx 1 6 0 0 2 1350 1700
-    vtx 2 6 0 0 3 1700 2100
-    vtx 3 0 0 0 0 900 900
-    vtx 4 0 0 0 0 900 900
-    vtx 5 0 0 0 0 900 900
-    vtx 6 0 0 0 0 900 900
-    vtx 7 0 0 0 0 900 900
-    vtx 8 0 0 0 0 900 900
-    vtx 9 0 0 0 0 900 900
     #$ OPTION END
     #$ OPTION_GROUP END
