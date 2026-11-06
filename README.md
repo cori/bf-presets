@@ -87,24 +87,39 @@ Two VTX presets, split by **VTX table family** — not by quad size. Each has a
 **`clear` writes the idle form of a row** — `vtx N 0 0 0 0 900 900` — which is
 what the firmware stores for an unused slot. A zero-width range never matches
 and a power of 0 means "leave the power as it is", so the cleared rows cannot
-touch the TX power. It leaves `vtx_band`, `vtx_channel` and `vtx_power` alone,
-so the power you have set stays whatever it is.
+touch the TX power. It leaves `vtx_band` and `vtx_channel` alone, and it sets
+`vtx_power = 1` — the table's first entry — because a config left at 0 would
+never push a power and the module would sit at its own power-on default.
 
-The **power** in a row is the **VTX device's own power value** — not a universal
-level. Each quad publishes its mapping in its own `vtxtable`: `powervalues` is
-the device value for each entry, `powerlabels` the label for it. The CLI checks
-the row's power against the table's **entry count**, so a power above the count
-is rejected with `invalid argument count` and the row is cleared, while a power
-one past the end is accepted and then does nothing on the device. Read your
-quad's table with `vtxtable powerlevels` / `powervalues` / `powerlabels`.
+The **power** in a row is a **one-based index into that quad's own `vtxtable`** —
+the firmware looks up `powervalues[index - 1]` and sends that to the VTX module.
+`powervalues` is the device value for each entry and `powerlabels` the label for
+it. Read your quad's table with `vtxtable powerlevels` / `powervalues` /
+`powerlabels`.
 
-| VTX family | `powervalues` | labels | usable in a row |
+| VTX family | `powervalues` | labels | index → level |
 |---|---|---|---|
-| BETAFPV G473 — Air65, Whoozat, Vi, Air75 III | `1 2 3 4 0` | 25 / 100 / 200 / 400 / PIT | 1, 2, 3, 4 |
-| Hummingbird, HummingRoach, AcroB, BardoII | `0 1 2` | 25 / 100 / MAX | 1, 2 |
-| TINYHAWK_II, NANOHAWK | `0 1 2` | 25 / 100 / 200 | 1, 2 |
-| NANOHAWK_II | `0` | 25 | — (only the parked value) |
-| MOBULA, PROFER | `1 2 14 20 26` | 0 / RCE / 25 / 100 / 400 | 14, 20, 26 |
+| BETAFPV G473 — Air65, Whoozat, Vi, Air75 III | `1 2 3 4 0` | 25 / 100 / 200 / 400 / PIT | 1=25, 2=100, 3=200, 4=400, 5=PIT |
+| Hummingbird, HummingRoach, AcroB, BardoII | `0 1 2` | 25 / 100 / MAX | 1=25, 2=100, 3=MAX |
+| TINYHAWK_II, NANOHAWK | `0 1 2` | 25 / 100 / 200 | 1=25, 2=100, 3=200 |
+| NANOHAWK_II | `0` | 25 only | 1=25 |
+| MOBULA, PROFER | `1 2 14 20 26` | 0 / RCE / 25 / 100 / 400 | 1=0, 2=RCE, 3=25, 4=100, 5=400 |
+
+**Index 0 means "unknown"**, and that is what makes a hand-set power vanish.
+`vtxCommonLookupPowerValue()` rejects it, so the FC never pushes a power to
+the module at all and the module keeps whatever it powered on at — 200 mW on
+the BETAFPV module, MAX on the three-level one. The config is the only source:
+`vtxProcessPower()` reads the module's index and, whenever it differs from the
+config, pushes the config's index back. So a quad whose `vtx_power` is 0 cannot
+be moved by any means, and the FC's own reset default with `USE_VTX_TABLE` is
+0 — which is why a quad that was never configured sits at its module's power-on
+default.
+
+Two things to remember: `set vtx_power = 1` is the lowest level on every
+family, and `set vtx_power` is range checked as 0 … level count − 1, so the
+*top* entry of a table cannot be parked with `set` (on a three-level table,
+index 3 = MAX is out of range for `set` but fine in a row, because the `vtx`
+command checks against the level *count*).
 
 Applying the G473 preset to a three-level quad fails on the 400 mW row with
 `invalid argument count`; applying the three-level preset to a G473 quietly
